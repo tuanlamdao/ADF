@@ -1,0 +1,101 @@
+{
+	"name": "RetailKnownShrinkZone1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSV",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SrcContainer": {
+				"type": "String",
+				"defaultValue": "retail-data"
+			},
+			"SrcDir": {
+				"type": "String",
+				"defaultValue": "internal/LDW/CSV/Shrink/RETAIL_KNOWN_SHRINK/2020/10/UNPROCESSED"
+			},
+			"SrcFileName": {
+				"type": "String",
+				"defaultValue": "RETAIL_KNOWN_SHRINK_20200928-20201022.csv"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().SrcFileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().SrcDir",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().SrcContainer",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "TX_DATE",
+				"type": "String"
+			},
+			{
+				"name": "LOCATION_ID",
+				"type": "String"
+			},
+			{
+				"name": "ITEM_ID",
+				"type": "String"
+			},
+			{
+				"name": "REASON_CODE",
+				"type": "String"
+			},
+			{
+				"name": "DISPOSAL_METHOD_CODE",
+				"type": "String"
+			},
+			{
+				"name": "SCAN_CODE_ID",
+				"type": "String"
+			},
+			{
+				"name": "SHRINK_REASON",
+				"type": "String"
+			},
+			{
+				"name": "DISPOSAL_METHOD",
+				"type": "String"
+			},
+			{
+				"name": "RECALL_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "SHRINK_UNITS",
+				"type": "String"
+			},
+			{
+				"name": "SHRINK_COST",
+				"type": "String"
+			},
+			{
+				"name": "LAST_CHANGED",
+				"type": "String"
+			},
+			{
+				"name": "LAST_DML",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

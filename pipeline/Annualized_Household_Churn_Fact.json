@@ -1,0 +1,30 @@
+{
+	"name": "Annualized_Household_Churn_Fact",
+	"properties": {
+		"activities": [
+			{
+				"name": "Annualized_Household_Churn_Fact",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/rahul_vig@saveonfoods.com/Churn_Annualized_Sales_DailyLoad"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-11-03T21:13:06Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

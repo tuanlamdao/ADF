@@ -1,0 +1,678 @@
+{
+	"name": "ParquetTGT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageParquetZone3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "internal/LDW/Parquet/Product-DIM/ITEM",
+				"container": "master-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "Item_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Legacy_Item_Code",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Legacy_Item_Code",
+				"type": "INT32"
+			},
+			{
+				"name": "Variant_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Variant_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Variant_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Variant_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Variant",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Variant",
+				"type": "UTF8"
+			},
+			{
+				"name": "Chinese_Variant",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Chinese_Variant",
+				"type": "UTF8"
+			},
+			{
+				"name": "Chinese_Variant_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Chinese_Variant_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Lead_Variant_Indicator",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Lead_Variant_Indicator",
+				"type": "INT32"
+			},
+			{
+				"name": "Lead_Retail_Variant",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Lead_Retail_Variant",
+				"type": "INT32"
+			},
+			{
+				"name": "Retail_Size",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Retail_Size",
+				"type": "UTF8"
+			},
+			{
+				"name": "Retail_Weight",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Current_Retail_Weight",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Retail_Pack",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Retail_Pack",
+				"type": "INT32"
+			},
+			{
+				"name": "Product_Status",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Product_Status",
+				"type": "INT32"
+			},
+			{
+				"name": "Option_Code",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Option_Code",
+				"type": "INT32"
+			},
+			{
+				"name": "Tax_Code",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Tax_Code",
+				"type": "INT32"
+			},
+			{
+				"name": "Financial_Sale_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Financial_Sale_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Merch_Sales_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Merch_Sales_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Stit",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Stit",
+				"type": "UTF8"
+			},
+			{
+				"name": "DPack",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_DPack",
+				"type": "UTF8"
+			},
+			{
+				"name": "Basket_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Basket_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Strategic_Group",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Strategic_Group",
+				"type": "UTF8"
+			},
+			{
+				"name": "Sell_Units",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Current_Sell_Units",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Amp_Forecast_Item",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Amp_Forecast_Item",
+				"type": "UTF8"
+			},
+			{
+				"name": "Repack_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Repack_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Week_Ad_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Last_Week_Ad_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Store_Report",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Store_Report",
+				"type": "UTF8"
+			},
+			{
+				"name": "Department_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Department_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Department_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Department_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Merch_Department_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Merch_Department_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Merch_Department",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Merch_Department",
+				"type": "UTF8"
+			},
+			{
+				"name": "GL_Department_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_GL_Department_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "GL_Department_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_GL_Department_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Cons_GL_Department_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Cons_GL_Department_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Cons_GL_Department",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Cons_GL_Department",
+				"type": "UTF8"
+			},
+			{
+				"name": "Cons_GL_Department_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Cons_GL_Department_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Cons_Department",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Cons_Department",
+				"type": "UTF8"
+			},
+			{
+				"name": "High_Level_Department",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_High_Level_Department",
+				"type": "UTF8"
+			},
+			{
+				"name": "Class_Cat",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Class_Cat",
+				"type": "UTF8"
+			},
+			{
+				"name": "Class",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Class",
+				"type": "UTF8"
+			},
+			{
+				"name": "Category_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Category_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Category",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Category",
+				"type": "UTF8"
+			},
+			{
+				"name": "New_Class",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_New_Class",
+				"type": "UTF8"
+			},
+			{
+				"name": "New_Class_Category",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_New_Class_Category",
+				"type": "UTF8"
+			},
+			{
+				"name": "New_Class_Subcategory",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_New_Class_Subcategory",
+				"type": "UTF8"
+			},
+			{
+				"name": "Family_Code",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Family_Code",
+				"type": "UTF8"
+			},
+			{
+				"name": "Family_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Family_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Family_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Family_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Family",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Family",
+				"type": "UTF8"
+			},
+			{
+				"name": "Vendor_Id",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Vendor_Id",
+				"type": "UTF8"
+			},
+			{
+				"name": "Brand_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Brand_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "AP_Vendor_Id",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_AP_Vendor_Id",
+				"type": "UTF8"
+			},
+			{
+				"name": "AP_Vendor_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_AP_Vendor_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "AP_Vendor",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_AP_Vendor",
+				"type": "UTF8"
+			},
+			{
+				"name": "AP_Vendor_Address_Line_1",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_AP_Vendor_Address_Line_1",
+				"type": "UTF8"
+			},
+			{
+				"name": "AP_Vendor_Address_Line_2",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_AP_Vendor_Address_Line_2",
+				"type": "UTF8"
+			},
+			{
+				"name": "AP_Vendor_City",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_AP_Vendor_City",
+				"type": "UTF8"
+			},
+			{
+				"name": "AP_Vendor_Province",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_AP_Vendor_Province",
+				"type": "UTF8"
+			},
+			{
+				"name": "Corp_Brand_Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Corp_Brand_Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Corp_Brand_Short_Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Corp_Brand_Short_Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Corp_Brand_Indicator",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Corp_Brand_Indicator",
+				"type": "UTF8"
+			},
+			{
+				"name": "Corp_Brand_Variant_Code",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Corp_Brand_Variant_Code",
+				"type": "UTF8"
+			},
+			{
+				"name": "Corp_Brand_Shield",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Corp_Brand_Shield",
+				"type": "UTF8"
+			},
+			{
+				"name": "Corp_Brand_Variant",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Corp_Brand_Variant",
+				"type": "UTF8"
+			},
+			{
+				"name": "Corp_Brand_Variant_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Corp_Brand_Variant_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Daymon",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Daymon",
+				"type": "UTF8"
+			},
+			{
+				"name": "Merchandiser_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Merchandiser_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Merchandiser_Number",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Merchandiser_Number",
+				"type": "UTF8"
+			},
+			{
+				"name": "Merchandiser",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Merchandiser",
+				"type": "UTF8"
+			},
+			{
+				"name": "SCPM",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_SCPM",
+				"type": "UTF8"
+			},
+			{
+				"name": "General_Manager",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_General_Manager",
+				"type": "UTF8"
+			},
+			{
+				"name": "Vice_President",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Vice_President",
+				"type": "UTF8"
+			},
+			{
+				"name": "CB_Director",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_CB_Director",
+				"type": "UTF8"
+			},
+			{
+				"name": "Business_Development_Manager",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Business_Development_Manager",
+				"type": "UTF8"
+			},
+			{
+				"name": "Listing_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Current_Listing_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Discontinue_Date",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Discontinue_Date",
+				"type": "UTF8"
+			},
+			{
+				"name": "Discontinue_Reason",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Discontinue_Reason",
+				"type": "UTF8"
+			},
+			{
+				"name": "Family_Start_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Current_Family_Start_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Family_End_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Current_Family_End_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Source_System_Code",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Source_System_Code",
+				"type": "UTF8"
+			},
+			{
+				"name": "Eff_Start_Dt",
+				"type": "DATE"
+			},
+			{
+				"name": "Eff_End_Dt",
+				"type": "DATE"
+			},
+			{
+				"name": "IsActive",
+				"type": "INT32"
+			},
+			{
+				"name": "Crc_Val",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Changed",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Dml",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

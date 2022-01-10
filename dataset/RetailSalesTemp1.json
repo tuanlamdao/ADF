@@ -1,0 +1,198 @@
+{
+	"name": "RetailSalesTemp1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageZone3",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TempContainer": {
+				"type": "String",
+				"defaultValue": "retail-data"
+			},
+			"TempDIR": {
+				"type": "String",
+				"defaultValue": "Internal/LDW/Parquet/Sales-FACT/RETAIL_HOLE_COUNT/Temp"
+			},
+			"TempFileName": {
+				"type": "String",
+				"defaultValue": "FACT_RETAIL_SALE.parquet"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().TempFileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().TempDIR",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().TempContainer",
+					"type": "Expression"
+				}
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "TRANSACTION_NUMBER",
+				"type": "INT64"
+			},
+			{
+				"name": "ITEM_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Item_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "FISCAL_DATE",
+				"type": "DATE"
+			},
+			{
+				"name": "LOCATION_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Location_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "REGISTER_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Register_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "CASHIER_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Cashier_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "OFFER_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Offer_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "POS_CODE",
+				"type": "INT32"
+			},
+			{
+				"name": "TRANSACTION_TIME",
+				"type": "UTF8"
+			},
+			{
+				"name": "CUSTOMER_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Customer_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "SCAN_CODE_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "ECOMM_TRANS_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "SALE_TYPE_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Sales_Type_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "BATCH_NUMBER",
+				"type": "INT32"
+			},
+			{
+				"name": "AD_VEHICLE_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Ad_Vehicle_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "ECOMM_FLAG",
+				"type": "UTF8"
+			},
+			{
+				"name": "INCENTIVE_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Incentive_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "REGULAR_RETAIL",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "REDEMPTION_SALES",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "PRODUCT_COST",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "POINTS_ISSUED",
+				"type": "INT32"
+			},
+			{
+				"name": "POINTS_REDEEMED",
+				"type": "INT32"
+			},
+			{
+				"name": "MERCH_SALES",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UNIT_COUNT",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "ITEM_COUNT",
+				"type": "INT32"
+			},
+			{
+				"name": "WEIGHT",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "MFC_UNITS",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "LAST_CHANGED",
+				"type": "UTF8"
+			},
+			{
+				"name": "LAST_DML",
+				"type": "INT32"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

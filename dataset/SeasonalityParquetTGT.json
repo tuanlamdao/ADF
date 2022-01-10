@@ -1,0 +1,58 @@
+{
+	"name": "SeasonalityParquetTGT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageZone3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "internal/LDW/Parquet/Product-DIM/SEASONALITY",
+				"container": "master-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "Seasonality_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "Item_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "Seasonality",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Changed",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Dml",
+				"type": "INT32"
+			},
+			{
+				"name": "Eff_Start_Dt",
+				"type": "DATE"
+			},
+			{
+				"name": "Eff_End_Dt",
+				"type": "DATE"
+			},
+			{
+				"name": "IsActive",
+				"type": "INT32"
+			},
+			{
+				"name": "Crc_Val",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

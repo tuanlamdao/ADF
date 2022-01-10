@@ -1,0 +1,28 @@
+{
+	"name": "SALE_TYPE_FinalSCD6",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SaleTypeReadMultipleTempParquetFiles",
+						"type": "DatasetReference"
+					},
+					"name": "SaleTypeMultipleParquetFiles"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SaleTypeParquetTGT",
+						"type": "DatasetReference"
+					},
+					"name": "sinkItemFinal"
+				}
+			],
+			"transformations": [],
+			"script": "source(output(\n\t\tSales_Type_Surrogate_ID as long,\n\t\tID as long,\n\t\tNAME as string,\n\t\tCurrent_NAME as string,\n\t\tCONSOLIDATED_ID as integer,\n\t\tCurrent_CONSOLIDATED_ID as integer,\n\t\tCONSOLIDATED_NAME as string,\n\t\tCurrent_CONSOLIDATED_NAME as string,\n\t\tRANK as integer,\n\t\tCurrent_RANK as integer,\n\t\tLAST_CHANGED as string,\n\t\tLAST_DML as integer,\n\t\tEFF_START_DT as date,\n\t\tEFF_END_DT as date,\n\t\tIsActive as integer,\n\t\tCRC_VAL as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet',\n\twildcardPaths:['Internal/LDW/Parquet/Sales-DIM/SALE_TYPE/Temp/*.parquet']) ~> SaleTypeMultipleParquetFiles\nSaleTypeMultipleParquetFiles sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tSales_Type_Surrogate_Id as long,\n\t\tID as long,\n\t\tSale_Type_Name as string,\n\t\tSale_Type_Current_Name as string,\n\t\tSale_Type_Consolidated_Id as integer,\n\t\tSale_Type_Current_Consolidated_Id as integer,\n\t\tSale_Type_Consolidated_Name as string,\n\t\tSale_Type_Current_Consolidated_Name as string,\n\t\tSale_Type_Rank as integer,\n\t\tSale_Type_Current_Rank as integer,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['DIM_SALE_TYPE.parquet'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tmapColumn(\n\t\tSales_Type_Surrogate_Id = Sales_Type_Surrogate_ID,\n\t\tID,\n\t\tSale_Type_Name = NAME,\n\t\tSale_Type_Current_Name = Current_NAME,\n\t\tSale_Type_Consolidated_Id = CONSOLIDATED_ID,\n\t\tSale_Type_Current_Consolidated_Id = Current_CONSOLIDATED_ID,\n\t\tSale_Type_Consolidated_Name = CONSOLIDATED_NAME,\n\t\tSale_Type_Current_Consolidated_Name = Current_CONSOLIDATED_NAME,\n\t\tSale_Type_Rank = RANK,\n\t\tSale_Type_Current_Rank = Current_RANK,\n\t\tLast_Changed = LAST_CHANGED,\n\t\tLast_Dml = LAST_DML,\n\t\tEff_Start_Dt = EFF_START_DT,\n\t\tEff_End_Dt = EFF_END_DT,\n\t\tIsActive,\n\t\tCrc_Val = CRC_VAL\n\t),\n\tpartitionBy('hash', 1)) ~> sinkItemFinal"
+		}
+	}
+}

@@ -1,0 +1,28 @@
+{
+	"name": "SEASONALITY_FinalSCD6",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SEASONALITYReadMultipleTempParquetFile",
+						"type": "DatasetReference"
+					},
+					"name": "SEASONALITYMultipleParquetFiles"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SeasonalityParquetTGT",
+						"type": "DatasetReference"
+					},
+					"name": "sinkItemFinal"
+				}
+			],
+			"transformations": [],
+			"script": "source(output(\n\t\tSeasonality_Surrogate_Id as long,\n\t\tItem_Id as long,\n\t\tSeasonality as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet',\n\twildcardPaths:['internal/LDW/Parquet/Product-DIM/SEASONALITY/Temp/*.parquet']) ~> SEASONALITYMultipleParquetFiles\nSEASONALITYMultipleParquetFiles sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tSeasonality_Surrogate_Id as long,\n\t\tItem_Id as long,\n\t\tSeasonality as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['DIM_SEASONALITY.parquet'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tmapColumn(\n\t\tSeasonality_Surrogate_Id,\n\t\tItem_Id,\n\t\tSeasonality,\n\t\tLast_Changed,\n\t\tLast_Dml,\n\t\tEff_Start_Dt,\n\t\tEff_End_Dt,\n\t\tIsActive,\n\t\tCrc_Val\n\t),\n\tpartitionBy('hash', 1)) ~> sinkItemFinal"
+		}
+	}
+}

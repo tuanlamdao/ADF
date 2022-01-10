@@ -1,0 +1,112 @@
+{
+	"name": "CASHIER_InitialSCD6",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CashierZone1SRC",
+						"type": "DatasetReference"
+					},
+					"name": "CASHIERParquetSCD"
+				},
+				{
+					"dataset": {
+						"referenceName": "CashierZone3TGT",
+						"type": "DatasetReference"
+					},
+					"name": "CASHIERDIM"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "CashierTempZone3",
+						"type": "DatasetReference"
+					},
+					"name": "sinkNew"
+				},
+				{
+					"dataset": {
+						"referenceName": "CashierTempZone3",
+						"type": "DatasetReference"
+					},
+					"name": "sinkExpiry"
+				},
+				{
+					"dataset": {
+						"referenceName": "CashierTempZone3",
+						"type": "DatasetReference"
+					},
+					"name": "sinkNoChange"
+				},
+				{
+					"dataset": {
+						"referenceName": "CashierTempZone3",
+						"type": "DatasetReference"
+					},
+					"name": "sinkDelete"
+				},
+				{
+					"dataset": {
+						"referenceName": "CashierTempZone3",
+						"type": "DatasetReference"
+					},
+					"name": "sinkSCD2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectTGT"
+				},
+				{
+					"name": "DerivedColumnCRCVAL"
+				},
+				{
+					"name": "AGGMAXVAL"
+				},
+				{
+					"name": "JoinSRCMaxTGTKey"
+				},
+				{
+					"name": "FindNewUpdateDeleteRecords"
+				},
+				{
+					"name": "CreateSurrogateKey"
+				},
+				{
+					"name": "NewChange"
+				},
+				{
+					"name": "DerivedColumnSurrogateKey"
+				},
+				{
+					"name": "Expiry"
+				},
+				{
+					"name": "DerivedColumnDelete"
+				},
+				{
+					"name": "JoinSrcTgt"
+				},
+				{
+					"name": "DerivedSCD2"
+				},
+				{
+					"name": "UnionExpiry"
+				},
+				{
+					"name": "DerivedColumn2"
+				},
+				{
+					"name": "DerivedColumn3"
+				},
+				{
+					"name": "SortSrcID"
+				}
+			],
+			"script": "source(output(\n\t\tID as integer,\n\t\tNAME as string,\n\t\tLAST_CHANGED as string,\n\t\tLAST_DML as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> CASHIERParquetSCD\nsource(output(\n\t\tCashier_Surrogate_Id as long,\n\t\tID as integer,\n\t\tName as string,\n\t\tCurrent_Name as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> CASHIERDIM\nCASHIERDIM select(mapColumn(\n\t\tTGT_Cashier_Surrogate_ID = Cashier_Surrogate_Id,\n\t\tTGT_ID = ID,\n\t\tTGT_NAME = Name,\n\t\tTGT_Current_NAME = Current_Name,\n\t\tTGT_LAST_CHANGED = Last_Changed,\n\t\tTGT_LAST_DML = Last_Dml,\n\t\tTGT_EFF_START_DT = Eff_Start_Dt,\n\t\tTGT_EFF_END_DT = Eff_End_Dt,\n\t\tTGT_IsActive = IsActive,\n\t\tTGT_CRC_VAL = Crc_Val\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectTGT\nSortSrcID derive(IsActive = 1,\n\t\tEFF_START_DT = toDate('1900-01-01'),\n\t\tEFF_END_DT = toDate('9999-12-31'),\n\t\tCRCVAL = case(isNull(ID),TGT_CRC_VAL,md5(NAME,LAST_DML))) ~> DerivedColumnCRCVAL\nSelectTGT aggregate(MAXVAL = max(TGT_Cashier_Surrogate_ID)) ~> AGGMAXVAL\nCASHIERParquetSCD, AGGMAXVAL join(1 == 1,\n\tjoinType:'cross',\n\tbroadcast: 'auto')~> JoinSRCMaxTGTKey\nDerivedColumnCRCVAL split((isNull(TGT_Cashier_Surrogate_ID)  && LAST_DML>=0) || (not(isNull(TGT_Cashier_Surrogate_ID)) && CRCVAL != TGT_CRC_VAL  && IsActive==1 ),\n\t(not(isNull(TGT_Cashier_Surrogate_ID)) && CRCVAL == TGT_CRC_VAL) && IsActive == 1,\n\tnot(isNull(TGT_Cashier_Surrogate_ID)) && LAST_DML < 0,\n\tdisjoint: false,\n\tpartitionBy('hash', 1)) ~> FindNewUpdateDeleteRecords@(SurrogateKey, NoSurrogateKey, Delete)\nFindNewUpdateDeleteRecords@SurrogateKey keyGenerate(output(SurrogateKey as long),\n\tstartAt: 1L) ~> CreateSurrogateKey\nDerivedColumnSurrogateKey split(isNull(TGT_Cashier_Surrogate_ID)  && LAST_DML>=0,\n\tnot(isNull(TGT_Cashier_Surrogate_ID)) && CRCVAL != TGT_CRC_VAL  && LAST_DML>=0 && TGT_IsActive == 1,\n\tnot(isNull(TGT_Cashier_Surrogate_ID)) && CRCVAL != TGT_CRC_VAL  && LAST_DML>=0 && TGT_IsActive == 0,\n\tdisjoint: false) ~> NewChange@(NewRecords, SCD2, SCDExpiry)\nCreateSurrogateKey derive(out_SurrogateKey = toInteger(SurrogateKey) + iifNull(MAXVAL,0,MAXVAL)) ~> DerivedColumnSurrogateKey\nNewChange@SCD2 derive(expiry_EFF_END_DATE = currentDate()) ~> Expiry\nFindNewUpdateDeleteRecords@Delete derive(delete_EFF_END_DATE = currentDate(),\n\t\tdelete_inactive = 0) ~> DerivedColumnDelete\nJoinSRCMaxTGTKey, SelectTGT join(ID == TGT_ID,\n\tjoinType:'outer',\n\tbroadcast: 'auto')~> JoinSrcTgt\nNewChange@SCD2 derive(scd_EFF_START_DT = currentDate()) ~> DerivedSCD2\nExpiry, NewChange@SCDExpiry union(byName: true)~> UnionExpiry\nUnionExpiry derive(final_EFF_END_DT = case(TGT_IsActive == 0,TGT_EFF_END_DT,expiry_EFF_END_DATE),\n\t\tfinal_Surrogate_Key = case(TGT_IsActive == 0,TGT_Cashier_Surrogate_ID,out_SurrogateKey),\n\t\tInactive = 0) ~> DerivedColumn2\nFindNewUpdateDeleteRecords@NoSurrogateKey derive(del_EFF_END_DATE = case(LAST_DML<0 && TGT_EFF_END_DT < currentDate(),TGT_EFF_END_DT,\r\nLAST_DML<0 && TGT_EFF_END_DT > currentDate(),currentDate()\r\n, TGT_EFF_END_DT),\n\t\tdel_inactive = case(LAST_DML<0,0,TGT_IsActive),\n\t\tdel_LAST_DML = case(LAST_DML<0,LAST_DML,TGT_LAST_DML)) ~> DerivedColumn3\nJoinSrcTgt sort(asc(ID, false)) ~> SortSrcID\nNewChange@NewRecords sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tinput(\n\t\tCashier_Surrogate_Id as long,\n\t\tID as integer,\n\t\tName as string,\n\t\tCurrent_Name as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['CashierDIM_New.parquet'],\n\tsaveOrder: 0,\n\tmapColumn(\n\t\tCashier_Surrogate_Id = out_SurrogateKey,\n\t\tID,\n\t\tName = NAME,\n\t\tCurrent_Name = NAME,\n\t\tLast_Changed = LAST_CHANGED,\n\t\tLast_Dml = LAST_DML,\n\t\tEff_Start_Dt = EFF_START_DT,\n\t\tEff_End_Dt = EFF_END_DT,\n\t\tIsActive,\n\t\tCrc_Val = CRCVAL\n\t),\n\tpartitionBy('hash', 1)) ~> sinkNew\nDerivedColumn2 sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tinput(\n\t\tCashier_Surrogate_Id as long,\n\t\tID as integer,\n\t\tName as string,\n\t\tCurrent_Name as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['CashierDIMChangeExpiry.parquet'],\n\tsaveOrder: 0,\n\tmapColumn(\n\t\tCashier_Surrogate_Id = TGT_Cashier_Surrogate_ID,\n\t\tID = TGT_ID,\n\t\tName = TGT_NAME,\n\t\tCurrent_Name = NAME,\n\t\tLast_Changed = TGT_LAST_CHANGED,\n\t\tLast_Dml = TGT_LAST_DML,\n\t\tEff_Start_Dt = TGT_EFF_START_DT,\n\t\tEff_End_Dt = final_EFF_END_DT,\n\t\tIsActive = Inactive,\n\t\tCrc_Val = TGT_CRC_VAL\n\t),\n\tpartitionBy('hash', 1)) ~> sinkExpiry\nDerivedColumn3 sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tinput(\n\t\tCashier_Surrogate_Id as long,\n\t\tID as integer,\n\t\tName as string,\n\t\tCurrent_Name as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['CashierDIMNoChange.parquet'],\n\tsaveOrder: 0,\n\tmapColumn(\n\t\tCashier_Surrogate_Id = TGT_Cashier_Surrogate_ID,\n\t\tID = TGT_ID,\n\t\tName = TGT_NAME,\n\t\tCurrent_Name = TGT_Current_NAME,\n\t\tLast_Changed = TGT_LAST_CHANGED,\n\t\tLast_Dml = del_LAST_DML,\n\t\tEff_Start_Dt = TGT_EFF_START_DT,\n\t\tEff_End_Dt = del_EFF_END_DATE,\n\t\tIsActive = del_inactive,\n\t\tCrc_Val = TGT_CRC_VAL\n\t),\n\tpartitionBy('hash', 1)) ~> sinkNoChange\nDerivedColumnDelete sink(allowSchemaDrift: false,\n\tvalidateSchema: false,\n\tinput(\n\t\tCashier_Surrogate_Id as long,\n\t\tID as integer,\n\t\tName as string,\n\t\tCurrent_Name as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['CashierDIMDelete.parquet'],\n\tsaveOrder: 0,\n\tmapColumn(\n\t\tCashier_Surrogate_Id = TGT_Cashier_Surrogate_ID,\n\t\tID,\n\t\tName = NAME,\n\t\tCurrent_Name = NAME,\n\t\tLast_Changed = LAST_CHANGED,\n\t\tLast_Dml = LAST_DML,\n\t\tEff_Start_Dt = EFF_START_DT,\n\t\tEff_End_Dt = delete_EFF_END_DATE,\n\t\tIsActive = delete_inactive,\n\t\tCrc_Val = CRCVAL\n\t),\n\tpartitionBy('hash', 1)) ~> sinkDelete\nDerivedSCD2 sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tinput(\n\t\tCashier_Surrogate_Id as long,\n\t\tID as integer,\n\t\tName as string,\n\t\tCurrent_Name as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['CashierDIMSCD2.parquet'],\n\tmapColumn(\n\t\tCashier_Surrogate_Id = out_SurrogateKey,\n\t\tID,\n\t\tName = NAME,\n\t\tCurrent_Name = NAME,\n\t\tLast_Changed = LAST_CHANGED,\n\t\tLast_Dml = LAST_DML,\n\t\tEff_Start_Dt = scd_EFF_START_DT,\n\t\tEff_End_Dt = EFF_END_DT,\n\t\tIsActive,\n\t\tCrc_Val = CRCVAL\n\t),\n\tpartitionBy('hash', 1)) ~> sinkSCD2"
+		}
+	}
+}

@@ -1,0 +1,307 @@
+{
+	"name": "CustomerParquetTGT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageParquetZone3",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TGTDir": {
+				"type": "String",
+				"defaultValue": "internal/LDW/Parquet/Customer-DIM/CUSTOMER/Final"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@dataset().TGTDir",
+					"type": "Expression"
+				},
+				"container": "master-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "Customer_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Household_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Household_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Card_Number",
+				"type": "INT64"
+			},
+			{
+				"name": "Current_Segment_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Current_Segment_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Primary_Card_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Primary_Card_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Customer_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Customer_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Address_Status",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Address_Status",
+				"type": "UTF8"
+			},
+			{
+				"name": "Customer_Address",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Customer_Address",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Customer_Phone",
+				"type": "UTF8"
+			},
+			{
+				"name": "Household_City",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Household_City",
+				"type": "UTF8"
+			},
+			{
+				"name": "Household_Postal_Code",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Household_Postal_Code",
+				"type": "UTF8"
+			},
+			{
+				"name": "Card_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Card_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "New_Household_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_New_Household_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Email_Status",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Email_Status",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Card_Email",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Ecomm_Email",
+				"type": "UTF8"
+			},
+			{
+				"name": "Send_Email_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Send_Email_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Send_Mail_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Send_Mail_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "TM_Card_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_TM_Card_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "TM_Location_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_TM_Location_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "TM_Household_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_TM_Household_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Card_Issue_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Current_First_Shop_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Current_Last_Shop_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Primary_Store_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Primary_Store_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_First_Ecomm_Shop_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Current_Last_Ecomm_Shop_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Primary_Ecomm_Store_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Primary_Ecomm_Store_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "HHN_First_Shop_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Current_HHN_First_Shop_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "HHN_First_Ecomm_Shop_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Current_HHN_First_Ecomm_Shop_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Household_Ecomm_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Household_Ecomm_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Household_Shopping_Chanel",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Household_Shopping_Chanel",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Lifetime_Points_Total",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Lifetime_Points_Redeem",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Lifetime_Spend",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Current_Points_Balance",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Current_Points_Balance",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Date_Of_Birth",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Age",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Age_Group",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Changed",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Dml",
+				"type": "UTF8"
+			},
+			{
+				"name": "Eff_Start_Dt",
+				"type": "DATE"
+			},
+			{
+				"name": "Eff_End_Dt",
+				"type": "DATE"
+			},
+			{
+				"name": "IsActive",
+				"type": "INT32"
+			},
+			{
+				"name": "Crc_Val",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

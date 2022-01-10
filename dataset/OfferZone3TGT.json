@@ -1,0 +1,199 @@
+{
+	"name": "OfferZone3TGT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageParquetZone3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "DIM_OFFER.parquet",
+				"folderPath": "Internal/LDW/Parquet/Offer&Promotion-DIM/OFFER",
+				"container": "retail-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "Offer_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Offer",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Offer",
+				"type": "UTF8"
+			},
+			{
+				"name": "Coupon_Indicator",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Coupon_Indicator",
+				"type": "UTF8"
+			},
+			{
+				"name": "Offer_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Offer_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Buy_Quantity",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Current_Buy_Quantity",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Get_Quantity",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Current_Get_Quantity",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Coupon_Scan_Code",
+				"type": "INT64"
+			},
+			{
+				"name": "Current_Coupon_Scan_Code",
+				"type": "INT64"
+			},
+			{
+				"name": "Offer_Segment",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Offer_Segment",
+				"type": "UTF8"
+			},
+			{
+				"name": "Offer_Program",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Offer_Program",
+				"type": "UTF8"
+			},
+			{
+				"name": "Offer_Threshold_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Offer_Threshold_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Offer_Redemption_Points",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Offer_Redemption_Points",
+				"type": "INT32"
+			},
+			{
+				"name": "Offer_Award_Points",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Offer_Award_Points",
+				"type": "INT32"
+			},
+			{
+				"name": "Offer_Threshold_Quantity",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Offer_Threshold_Quantity",
+				"type": "INT32"
+			},
+			{
+				"name": "Offer_Source_System",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Offer_Source_System",
+				"type": "UTF8"
+			},
+			{
+				"name": "Offer_Reason",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Offer_Reason",
+				"type": "UTF8"
+			},
+			{
+				"name": "Offer_Multiple",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Offer_Multiple",
+				"type": "INT32"
+			},
+			{
+				"name": "Price_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Price_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Deleted_Offer",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Deleted_Offer",
+				"type": "UTF8"
+			},
+			{
+				"name": "Hot_Offer",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Hot_Offer",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Changed",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Dml",
+				"type": "INT32"
+			},
+			{
+				"name": "Eff_Start_Dt",
+				"type": "DATE"
+			},
+			{
+				"name": "Eff_End_Dt",
+				"type": "DATE"
+			},
+			{
+				"name": "IsActive",
+				"type": "INT32"
+			},
+			{
+				"name": "Crc_Val",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

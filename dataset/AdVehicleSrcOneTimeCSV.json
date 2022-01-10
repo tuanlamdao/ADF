@@ -1,0 +1,124 @@
+{
+	"name": "AdVehicleSrcOneTimeCSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSVZone1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SrcContainer": {
+				"type": "String",
+				"defaultValue": "retail-data"
+			},
+			"SrcDIR": {
+				"type": "String",
+				"defaultValue": "internal/LDW/CSV/Offer&Promotion/AD_VEHICLE/2021/01/UNPROCESSED"
+			},
+			"SrcFileName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().SrcFileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().SrcDIR",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().SrcContainer",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "PUBLICATION_ENTITY_NAME",
+				"type": "String"
+			},
+			{
+				"name": "SECTION_NAME",
+				"type": "String"
+			},
+			{
+				"name": "PAGE_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "TOTAL_PAGES",
+				"type": "String"
+			},
+			{
+				"name": "SECTION_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "SPOT_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "SPOT_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "PAGE",
+				"type": "String"
+			},
+			{
+				"name": "SECTION",
+				"type": "String"
+			},
+			{
+				"name": "SPOT",
+				"type": "String"
+			},
+			{
+				"name": "SPOT_POSITION",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_OFFER_DURATION",
+				"type": "String"
+			},
+			{
+				"name": "SECTION_FULL_DESCRIPTION",
+				"type": "String"
+			},
+			{
+				"name": "SPOT_FULL_DESCRIPTION",
+				"type": "String"
+			},
+			{
+				"name": "SPOT_POSITION_FULL_DESCRIPTION",
+				"type": "String"
+			},
+			{
+				"name": "PUBLICATION_VERSION",
+				"type": "String"
+			},
+			{
+				"name": "MAIN_AD_DESCRIPTION",
+				"type": "String"
+			},
+			{
+				"name": "AD_VARIETIES",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

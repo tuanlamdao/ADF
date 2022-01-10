@@ -1,0 +1,512 @@
+{
+	"name": "Orch_Files_To_ToIngest",
+	"properties": {
+		"description": "Prepare Files To Ingest By IICS",
+		"activities": [
+			{
+				"name": "Get The List Of Files To Ingest",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Delete ToIngest If Exists",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[ETL].[GET_THE_LIST_OF_STD_FILES]",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_etl_generic",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Loop Through Files in Priority-Not Last",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Filter based on process priority-Not Last",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Filter based on process priority-Not Last').output.value",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"batchCount": 16,
+					"activities": [
+						{
+							"name": "Check To Ensure File Exists-P1",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "ds_dl_generic_src",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@item().Source_File_Name",
+											"type": "Expression"
+										},
+										"FolderName": {
+											"value": "@item().File_Path",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"exists"
+								]
+							}
+						},
+						{
+							"name": "If Exists Process the File - P1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Check To Ensure File Exists-P1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@activity('Check To Ensure File Exists-P1').output.exists",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Move File To ToIngest-P1",
+										"type": "ExecutePipeline",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"pipeline": {
+												"referenceName": "Orch_Files_To_ToIngest_Process_ToIngest_File",
+												"type": "PipelineReference"
+											},
+											"waitOnCompletion": true,
+											"parameters": {
+												"RowItem": {
+													"value": "@item()",
+													"type": "Expression"
+												},
+												"DL_TopFolder": {
+													"value": "@pipeline().parameters.DL_TopFolder",
+													"type": "Expression"
+												},
+												"IICS_Ingestion_Path": {
+													"value": "@pipeline().parameters.IICS_Ingestion_Path",
+													"type": "Expression"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Does ToIngest Folder Exist",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_dl_generic_folder_no_DataRange",
+						"type": "DatasetReference",
+						"parameters": {
+							"FolderName": {
+								"value": "@concat(pipeline().parameters.DL_TopFolder, '/', pipeline().parameters.IICS_Ingestion_Path)",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [
+						"exists"
+					]
+				}
+			},
+			{
+				"name": "Delete ToIngest If Exists",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Does ToIngest Folder Exist",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@activity('Does ToIngest Folder Exist').output.exists",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Delete Current Ingestion Folder",
+							"type": "Delete",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "ds_dl_generic_folder_no_DataRange",
+									"type": "DatasetReference",
+									"parameters": {
+										"FolderName": {
+											"value": "@concat(pipeline().parameters.DL_TopFolder, '/', pipeline().parameters.IICS_Ingestion_Path)",
+											"type": "Expression"
+										}
+									}
+								},
+								"logStorageSettings": {
+									"linkedServiceName": {
+										"referenceName": "ls_dl_generic",
+										"type": "LinkedServiceReference"
+									},
+									"path": {
+										"value": "@concat(pipeline().parameters.DL_TopFolder, '/', pipeline().parameters.IICS_Ingestion_Path, '_Delete_Log')",
+										"type": "Expression"
+									}
+								},
+								"enableLogging": true,
+								"recursive": true
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Filter based on process priority-Not Last",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "Get The List Of Files To Ingest",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get The List Of Files To Ingest').output.value",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@not(equals(item().Process_Order, 99))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Filter based on process priority-Last",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "Get The List Of Files To Ingest",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get The List Of Files To Ingest').output.value",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@equals(item().Process_Order, 99)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Loop Through Files in Priority-Last",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Filter based on process priority-Last",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Loop Through Files in Priority-Not Last",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Filter based on process priority-Last').output.value",
+						"type": "Expression"
+					},
+					"batchCount": 1,
+					"activities": [
+						{
+							"name": "Check To Ensure File Exists-P99",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "ds_dl_generic_src",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@item().Source_File_Name",
+											"type": "Expression"
+										},
+										"FolderName": {
+											"value": "@item().File_Path",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"exists"
+								]
+							}
+						},
+						{
+							"name": "If Exists Process the File - P99",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Check To Ensure File Exists-P99",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@activity('Check To Ensure File Exists-P99').output.exists",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Move File To ToIngest-P99",
+										"type": "ExecutePipeline",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"pipeline": {
+												"referenceName": "Orch_Files_To_ToIngest_Process_ToIngest_File",
+												"type": "PipelineReference"
+											},
+											"waitOnCompletion": true,
+											"parameters": {
+												"RowItem": {
+													"value": "@item()",
+													"type": "Expression"
+												},
+												"DL_TopFolder": {
+													"value": "@pipeline().parameters.DL_TopFolder",
+													"type": "Expression"
+												},
+												"IICS_Ingestion_Path": {
+													"value": "@pipeline().parameters.IICS_Ingestion_Path",
+													"type": "Expression"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "ListOfValidFoldersToIICS",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Delete ToIngest If Exists",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT [Data_Lake_Mapping_Folder] FROM [ETL].[FILE_TO_DATA_LAKE_MAPPING] \nWHERE [Target_Table] IS NOT NULL;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_etl_generic",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Loop Through required Folders",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "ListOfValidFoldersToIICS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('ListOfValidFoldersToIICS').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Create Folder Structure",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureBlobFSSource",
+									"recursive": true
+								},
+								"sink": {
+									"type": "AzureBlobFSSink"
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_dl_generic_src",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": "empty_file.csv",
+										"FolderName": {
+											"value": "@concat(pipeline().parameters.DL_TopFolder, '/', replace(pipeline().parameters.IICS_Ingestion_Path, last(split(pipeline().parameters.IICS_Ingestion_Path, '/')), ''))",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_dl_generic_folder_no_DataRange",
+									"type": "DatasetReference",
+									"parameters": {
+										"FolderName": {
+											"value": "@concat(pipeline().parameters.DL_TopFolder, '/', pipeline().parameters.IICS_Ingestion_Path, '/', last(split(item().Data_Lake_Mapping_Folder, '/')))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"DL_TopFolder": {
+				"type": "string",
+				"defaultValue": "owfg-dna-dl"
+			},
+			"IICS_Ingestion_Path": {
+				"type": "string",
+				"defaultValue": "InTransit/ToIngest"
+			}
+		},
+		"variables": {
+			"FileExtension": {
+				"type": "String"
+			},
+			"FileName": {
+				"type": "String"
+			},
+			"FileDate": {
+				"type": "String"
+			},
+			"TargetFileName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-01-24T02:17:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

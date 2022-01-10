@@ -1,0 +1,30 @@
+{
+	"name": "Notebook_Known_Shrink",
+	"properties": {
+		"activities": [
+			{
+				"name": "Notebook_Known_Shrink",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Production/Product_Activity_Model_V1/RETAIL_SALES/FACT/Fact_Retail_Know_Shrink"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-10-29T17:35:38Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,42 @@
+{
+	"name": "dataflow_EmptyFileCheck",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "AdVehicleZone1SRC",
+						"type": "DatasetReference"
+					},
+					"name": "Source"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "PassEmptyFileZone1",
+						"type": "DatasetReference"
+					},
+					"name": "sinkPass"
+				},
+				{
+					"dataset": {
+						"referenceName": "FailEmptyFileZone1",
+						"type": "DatasetReference"
+					},
+					"name": "sinkFail"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Aggregate1"
+				},
+				{
+					"name": "ConditionalSplit1"
+				}
+			],
+			"script": "source(output(\n\t\tID as long,\n\t\tPUBLICATION_ENTITY_NAME as string,\n\t\tSECTION_NAME as string,\n\t\tPAGE_NUMBER as string,\n\t\tTOTAL_PAGES as string,\n\t\tSECTION_NUMBER as string,\n\t\tSPOT_NUMBER as string,\n\t\tSPOT_TYPE as string,\n\t\tPAGE as string,\n\t\tSECTION as string,\n\t\tSPOT as string,\n\t\tSPOT_POSITION as string,\n\t\tVEHICLE_OFFER_DURATION as string,\n\t\tSECTION_FULL_DESCRIPTION as string,\n\t\tSPOT_FULL_DESCRIPTION as string,\n\t\tSPOT_POSITION_FULL_DESCRIPTION as string,\n\t\tPUBLICATION_VERSION as string,\n\t\tMAIN_AD_DESCRIPTION as string,\n\t\tAD_VARIETIES as string,\n\t\tLAST_CHANGED as string,\n\t\tLAST_DML as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Source\nSource aggregate(groupBy(ID),\n\tCount_ID = count(ID)) ~> Aggregate1\nAggregate1 split(Count_ID>0,\n\tdisjoint: false) ~> ConditionalSplit1@(Pass, Fail)\nConditionalSplit1@Pass sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Pass.csv'],\n\tmapColumn(\n\t\tID\n\t),\n\tpartitionBy('hash', 1)) ~> sinkPass\nConditionalSplit1@Fail sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Fail.csv'],\n\tmapColumn(\n\t\tID\n\t),\n\tpartitionBy('hash', 1)) ~> sinkFail"
+		}
+	}
+}

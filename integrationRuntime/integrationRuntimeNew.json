@@ -1,0 +1,17 @@
+{
+	"name": "integrationRuntimeNew",
+	"properties": {
+		"type": "Managed",
+		"typeProperties": {
+			"computeProperties": {
+				"location": "AutoResolve",
+				"dataFlowProperties": {
+					"computeType": "MemoryOptimized",
+					"coreCount": 16,
+					"timeToLive": 0,
+					"cleanup": true
+				}
+			}
+		}
+	}
+}

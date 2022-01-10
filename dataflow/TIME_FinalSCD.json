@@ -1,0 +1,32 @@
+{
+	"name": "TIME_FinalSCD",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DateTimeZone1SRC",
+						"type": "DatasetReference"
+					},
+					"name": "SrcDateTIME"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DateTimeZone3TGT",
+						"type": "DatasetReference"
+					},
+					"name": "sinkTIME"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DateConversion"
+				}
+			],
+			"script": "source(output(\n\t\tCALENDAR_DATE as string,\n\t\tWEEK_END_DATE as string,\n\t\tPERIOD_END_DATE as string,\n\t\tQUARTER_END_DATE as string,\n\t\tPERIOD as short,\n\t\tWEEK as short,\n\t\tQUARTER as short,\n\t\tYEAR as short,\n\t\tYR_WK as string,\n\t\tYR_PD as string,\n\t\tYR_QTR as string,\n\t\tMONTH_DAY as string,\n\t\tFLYER_YEAR_NUMBER as short,\n\t\tFLYER_WEEK_NUMBER as short,\n\t\tFLYER_WEEK_ENDING_DATE as string,\n\t\tFLYER_YR_WK as string,\n\t\tCALENDAR_YEAR as short,\n\t\tCALENDAR_MONTH as string,\n\t\tFISCAL_DAY_NUMBER as short,\n\t\tDAY_OF_WEEK as string,\n\t\tDAY_OF_WEEK_NUMBER as short,\n\t\tWEEK_SORT as short,\n\t\tLEAP_YEAR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> SrcDateTIME\nSrcDateTIME derive(o_CALENDAR_DATE = toDate(CALENDAR_DATE,'MM/dd/yyyy'),\n\t\to_FLYER_WEEK_ENDING_DATE = toDate(FLYER_WEEK_ENDING_DATE,'MM/dd/yyyy'),\n\t\to_QUARTER_END_DATE = toDate(QUARTER_END_DATE,'MM/dd/yyyy'),\n\t\to_PERIOD_END_DATE = toDate(PERIOD_END_DATE,'MM/dd/yyyy'),\n\t\to_WEEK_END_DATE = toDate(WEEK_END_DATE,'MM/dd/yyyy')) ~> DateConversion\nDateConversion sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tDate as date,\n\t\tWeek_End_Date as date,\n\t\tPeriod_End_Date as date,\n\t\tQuarter_End_Date as date,\n\t\tPeriod as short,\n\t\tWeek as short,\n\t\tQuarter as short,\n\t\tYear as short,\n\t\t{Yr-Wk} as string,\n\t\t{Yr-Pd} as string,\n\t\t{Yr-Qtr} as string,\n\t\t{Month-Day} as string,\n\t\tFlyer_Year_Number as short,\n\t\tFlyer_Week_Number as short,\n\t\tFlyer_Week_Ending_Date as date,\n\t\t{Flyer_Yr-Wk} as string,\n\t\tCalendar_Year as short,\n\t\tCalendar_Month as string,\n\t\tFiscal_Day_Number as short,\n\t\tDay_Of_Week as string,\n\t\tDay_Of_Week_Number as short,\n\t\tWeek_Sort as short,\n\t\tLeap_Year as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['DIM_TIME.parquet'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tmapColumn(\n\t\tDate = o_CALENDAR_DATE,\n\t\tWeek_End_Date = o_WEEK_END_DATE,\n\t\tPeriod_End_Date = o_PERIOD_END_DATE,\n\t\tQuarter_End_Date = o_QUARTER_END_DATE,\n\t\tPeriod = PERIOD,\n\t\tWeek = WEEK,\n\t\tQuarter = QUARTER,\n\t\tYear = YEAR,\n\t\t{Yr-Wk} = YR_WK,\n\t\t{Yr-Pd} = YR_PD,\n\t\t{Yr-Qtr} = YR_QTR,\n\t\t{Month-Day} = MONTH_DAY,\n\t\tFlyer_Year_Number = FLYER_YEAR_NUMBER,\n\t\tFlyer_Week_Number = FLYER_WEEK_NUMBER,\n\t\tFlyer_Week_Ending_Date = o_FLYER_WEEK_ENDING_DATE,\n\t\t{Flyer_Yr-Wk} = FLYER_YR_WK,\n\t\tCalendar_Year = CALENDAR_YEAR,\n\t\tCalendar_Month = CALENDAR_MONTH,\n\t\tFiscal_Day_Number = FISCAL_DAY_NUMBER,\n\t\tDay_Of_Week = DAY_OF_WEEK,\n\t\tDay_Of_Week_Number = DAY_OF_WEEK_NUMBER,\n\t\tWeek_Sort = WEEK_SORT,\n\t\tLeap_Year = LEAP_YEAR\n\t),\n\tpartitionBy('hash', 1)) ~> sinkTIME"
+		}
+	}
+}

@@ -1,0 +1,30 @@
+{
+	"name": "ds_dl_generic_src",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_dl_generic",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FileName": {
+				"type": "String"
+			},
+			"FolderName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "AzureBlobFSFile",
+		"typeProperties": {
+			"fileName": {
+				"value": "@dataset().FileName",
+				"type": "Expression"
+			},
+			"folderPath": {
+				"value": "@dataset().FolderName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

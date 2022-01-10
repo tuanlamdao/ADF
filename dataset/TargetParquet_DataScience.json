@@ -1,0 +1,21 @@
+{
+	"name": "TargetParquet_DataScience",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageZone3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "internal/LDW/Parquet/Customer-DIM/CUSTOMER",
+				"container": "master-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

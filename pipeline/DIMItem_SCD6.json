@@ -1,0 +1,329 @@
+{
+	"name": "DIMItem_SCD6",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get_Metadata_Item",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "CSVZone1",
+						"type": "DatasetReference",
+						"parameters": {
+							"SrcContainer": "master-data",
+							"SrcDIR": "internal/LDW/CSV/Product/ITEM/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED"
+						}
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "ForEach_Item",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get_Metadata_Item",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get_Metadata_Item').output.childitems",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy_Succeeded",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "ITEM_FinalSCD6",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "AdVehicleZone1SRC",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "master-data",
+										"SrcDIR": "internal/LDW/CSV/Product/ITEM/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "SaleTypeZone1SRC",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "master-data",
+										"SrcDIR": "internal/LDW/CSV/Product/ITEM/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Copy_Failure",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "ITEM_InitialSCD6",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "SaleTypeZone1SRC",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "master-data",
+										"SrcDIR": "internal/LDW/CSV/Product/ITEM/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "SaleTypeZone1SRC",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "master-data",
+										"SrcDIR": "internal/LDW/CSV/Product/ITEM/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/Failure",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "SrcDelete",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "Copy_Succeeded",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "AdVehicleZone1SRC",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "master-data",
+										"SrcDIR": "internal/LDW/CSV/Product/ITEM/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": false
+								}
+							}
+						},
+						{
+							"name": "ITEM_InitialSCD6",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "ITEM_InitialSCD6",
+									"type": "DataFlowReference",
+									"datasetParameters": {
+										"ITEMParquetSCD": {
+											"SrcContainer": "master-data",
+											"SrcDIR": "internal/LDW/CSV/Product/ITEM/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+											"SrcFileName": {
+												"value": "@item().name",
+												"type": "Expression"
+											}
+										}
+									}
+								},
+								"integrationRuntime": {
+									"referenceName": "integrationRuntimeNew",
+									"type": "IntegrationRuntimeReference"
+								},
+								"traceLevel": "Coarse"
+							}
+						},
+						{
+							"name": "ITEM_FinalSCD6",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [
+								{
+									"activity": "ITEM_InitialSCD6",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "ITEM_FinalSCD6",
+									"type": "DataFlowReference"
+								},
+								"integrationRuntime": {
+									"referenceName": "integrationRuntimeNew",
+									"type": "IntegrationRuntimeReference"
+								},
+								"traceLevel": "None"
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-09-15T19:13:54Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

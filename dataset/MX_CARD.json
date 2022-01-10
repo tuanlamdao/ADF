@@ -1,0 +1,119 @@
+{
+	"name": "MX_CARD",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "CX",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PSN",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "HHN",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "POSID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CARDTYPE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CARDSTATUS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CARDFLAGS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LASTCHANGEDATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "LASTCHANGEUSERID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "ORGANIZATION",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EFFDATE",
+				"type": "date"
+			},
+			{
+				"name": "PUBLIC_REFERENCE_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "HHN_ECOMM_TYPE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "HHN_SHOP_CHNL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ID_TYPE_CODE",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ID_TYPE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "RUNTIME",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "RUN_BY",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CRC_VAL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LOAD_DTTM",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "UPD_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "card"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

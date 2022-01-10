@@ -1,0 +1,16 @@
+{
+	"name": "AzureBlobStorageCSVZone1",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobStorage",
+		"typeProperties": {
+			"connectionString": "DefaultEndpointsProtocol=https;AccountName=sofdlzone1;EndpointSuffix=core.windows.net;",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIk9GQURGUFJEMDAxXzA2N2Y4MzI0LTlmYTItNGQ1MC1hNjRiLWVlMTZmZGZlNmFhYSINCn0="
+		},
+		"connectVia": {
+			"referenceName": "integrationRuntimeNew",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

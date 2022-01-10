@@ -1,0 +1,406 @@
+{
+	"name": "LocationReadMultipleTempParquetFiles",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageZone3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "internal/LDW/Parquet/Location-DIM/LOCATION/Temp",
+				"container": "master-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "Location_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "ID",
+				"type": "INT64"
+			},
+			{
+				"name": "STORE_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_STORE_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "STORE_NUMBER",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_STORE_NUMBER",
+				"type": "INT32"
+			},
+			{
+				"name": "STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "STORE_ADDRESS",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_STORE_ADDRESS",
+				"type": "UTF8"
+			},
+			{
+				"name": "CITY",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_CITY",
+				"type": "UTF8"
+			},
+			{
+				"name": "PROVINCE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_PROVINCE",
+				"type": "UTF8"
+			},
+			{
+				"name": "POSTAL_CODE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_POSTAL_CODE",
+				"type": "UTF8"
+			},
+			{
+				"name": "LATITUDE",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Current_LATITUDE",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "LONGITUDE",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Current_LONGITUDE",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "SQUARE_FOOTAGE",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_SQUARE_FOOTAGE",
+				"type": "INT32"
+			},
+			{
+				"name": "OPENING_DATE",
+				"type": "DATE"
+			},
+			{
+				"name": "Current_OPENING_DATE",
+				"type": "DATE"
+			},
+			{
+				"name": "CLOSING_DATE",
+				"type": "DATE"
+			},
+			{
+				"name": "Current_CLOSING_DATE",
+				"type": "DATE"
+			},
+			{
+				"name": "REGIONAL_MANAGER",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_REGIONAL_MANAGER",
+				"type": "UTF8"
+			},
+			{
+				"name": "STORE_MANAGER",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_STORE_MANAGER",
+				"type": "UTF8"
+			},
+			{
+				"name": "DIVISION",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_DIVISION",
+				"type": "UTF8"
+			},
+			{
+				"name": "BANNER",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_BANNER",
+				"type": "UTF8"
+			},
+			{
+				"name": "BANNER_SHORT_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_BANNER_SHORT_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "DIVISIONAL_ORDER",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_DIVISIONAL_ORDER",
+				"type": "INT32"
+			},
+			{
+				"name": "DIVISIONAL_REGIONAL_ROLLUP",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_DIVISIONAL_REGIONAL_ROLLUP",
+				"type": "UTF8"
+			},
+			{
+				"name": "REGION_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_REGION_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "REGION",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_REGION",
+				"type": "INT32"
+			},
+			{
+				"name": "REPORTING_REGION",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_REPORTING_REGION",
+				"type": "UTF8"
+			},
+			{
+				"name": "AD_GROUP_NUMBER",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_AD_GROUP_NUMBER",
+				"type": "INT32"
+			},
+			{
+				"name": "AD_GROUP_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_AD_GROUP_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "AD_GROUP",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_AD_GROUP",
+				"type": "UTF8"
+			},
+			{
+				"name": "PRICING_GROUP_NUMBER",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_PRICING_GROUP_NUMBER",
+				"type": "INT32"
+			},
+			{
+				"name": "PRICING_GROUP_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_PRICING_GROUP_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "PRICING_GROUP",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_PRICING_GROUP",
+				"type": "UTF8"
+			},
+			{
+				"name": "SAME_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_SAME_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "ECOMM_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_ECOMM_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "ALG_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_ALG_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "OPEN_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_OPEN_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "OPEN_CONVERTED_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_OPEN_CONVERTED_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "RESTAURANT_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_RESTAURANT_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "COFFEE_SHOP_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_COFFEE_SHOP_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "PHARMACY_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_PHARMACY_STORE",
+				"type": "UTF8"
+			},
+			{
+				"name": "STORE_TYPE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_STORE_TYPE",
+				"type": "UTF8"
+			},
+			{
+				"name": "LOCATION_TYPE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_LOCATION_TYPE",
+				"type": "UTF8"
+			},
+			{
+				"name": "LOCATION_TYPE_DESCRIPTION",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_LOCATION_TYPE_DESCRIPTION",
+				"type": "UTF8"
+			},
+			{
+				"name": "LOCATION_GROUP_TYPE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_LOCATION_GROUP_TYPE",
+				"type": "UTF8"
+			},
+			{
+				"name": "LOCATION_GROUP",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_LOCATION_GROUP",
+				"type": "UTF8"
+			},
+			{
+				"name": "ECOMM_OPEN_DATE",
+				"type": "DATE"
+			},
+			{
+				"name": "Current_ECOMM_OPEN_DATE",
+				"type": "DATE"
+			},
+			{
+				"name": "ECOMM_TYPE",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_ECOMM_TYPE",
+				"type": "UTF8"
+			},
+			{
+				"name": "MERCH_PROGRAM",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_MERCH_PROGRAM",
+				"type": "UTF8"
+			},
+			{
+				"name": "EFF_START_DT",
+				"type": "DATE"
+			},
+			{
+				"name": "EFF_END_DT",
+				"type": "DATE"
+			},
+			{
+				"name": "IsActive",
+				"type": "INT32"
+			},
+			{
+				"name": "CRC_VAL",
+				"type": "UTF8"
+			},
+			{
+				"name": "LAST_CHANGED",
+				"type": "UTF8"
+			},
+			{
+				"name": "LAST_DML",
+				"type": "INT64"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,190 @@
+{
+	"name": "CustomerZone1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSV",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "CUSTOMER_20201009_112204.csv",
+				"folderPath": "internal/LDW/CSV/Customer/CUSTOMER/2020/10",
+				"container": "master-data"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "HOUSEHOLD_ID",
+				"type": "String"
+			},
+			{
+				"name": "CARD_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "CURRENT_SEGMENT_NAME",
+				"type": "String"
+			},
+			{
+				"name": "PRIMARY_CARD_FLAG",
+				"type": "String"
+			},
+			{
+				"name": "CUSTOMER_NAME",
+				"type": "String"
+			},
+			{
+				"name": "ADDRESS_STATUS",
+				"type": "String"
+			},
+			{
+				"name": "CUSTOMER_ADDRESS",
+				"type": "String"
+			},
+			{
+				"name": "CUSTOMER_PHONE",
+				"type": "String"
+			},
+			{
+				"name": "HOUSEHOLD_CITY",
+				"type": "String"
+			},
+			{
+				"name": "HOUSEHOLD_POSTAL_CODE",
+				"type": "String"
+			},
+			{
+				"name": "CARD_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "NEW_HOUSEHOLD_FLAG",
+				"type": "String"
+			},
+			{
+				"name": "EMAIL_STATUS",
+				"type": "String"
+			},
+			{
+				"name": "CARD_EMAIL",
+				"type": "String"
+			},
+			{
+				"name": "ECOMM_EMAIL",
+				"type": "String"
+			},
+			{
+				"name": "SEND_EMAIL_FLAG",
+				"type": "String"
+			},
+			{
+				"name": "SEND_MAIL_FLAG",
+				"type": "String"
+			},
+			{
+				"name": "TM_CARD_FLAG",
+				"type": "String"
+			},
+			{
+				"name": "TM_LOCATION_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "TM_HOUSEHOLD_FLAG",
+				"type": "String"
+			},
+			{
+				"name": "CARD_ISSUE_DATE",
+				"type": "String"
+			},
+			{
+				"name": "FIRST_SHOP_DATE",
+				"type": "String"
+			},
+			{
+				"name": "LAST_SHOP_DATE",
+				"type": "String"
+			},
+			{
+				"name": "PRIMARY_STORE_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "FIRST_ECOMM_SHOP_DATE",
+				"type": "String"
+			},
+			{
+				"name": "LAST_ECOMM_SHOP_DATE",
+				"type": "String"
+			},
+			{
+				"name": "PRIMARY_ECOMM_STORE_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "HHN_FIRST_SHOP_DATE",
+				"type": "String"
+			},
+			{
+				"name": "HHN_FIRST_ECOMM_SHOP_DATE",
+				"type": "String"
+			},
+			{
+				"name": "HOUSEHOLD_ECOMM_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "HOUSEHOLD_SHOPPING_CHANEL",
+				"type": "String"
+			},
+			{
+				"name": "LIFETIME_POINTS_TOTAL",
+				"type": "String"
+			},
+			{
+				"name": "LIFETIME_POINTS_REDEEM",
+				"type": "String"
+			},
+			{
+				"name": "LIFETIME_SPEND",
+				"type": "String"
+			},
+			{
+				"name": "CURRENT_POINTS_BALANCE",
+				"type": "String"
+			},
+			{
+				"name": "DATE_OF_BIRTH",
+				"type": "String"
+			},
+			{
+				"name": "AGE",
+				"type": "String"
+			},
+			{
+				"name": "AGE_GROUP",
+				"type": "String"
+			},
+			{
+				"name": "LAST_CHANGED",
+				"type": "String"
+			},
+			{
+				"name": "LAST_DML",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

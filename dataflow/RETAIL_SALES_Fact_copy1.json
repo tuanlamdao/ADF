@@ -1,0 +1,164 @@
+{
+	"name": "RETAIL_SALES_Fact_copy1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "RetailSalesZone1",
+						"type": "DatasetReference"
+					},
+					"name": "RetailSalesSRC"
+				},
+				{
+					"dataset": {
+						"referenceName": "EcommTGT",
+						"type": "DatasetReference"
+					},
+					"name": "LocationTGT"
+				},
+				{
+					"dataset": {
+						"referenceName": "ItemZone3TGT",
+						"type": "DatasetReference"
+					},
+					"name": "ItemTGT"
+				},
+				{
+					"dataset": {
+						"referenceName": "REGISTERZone3TGT",
+						"type": "DatasetReference"
+					},
+					"name": "RegisterTGT"
+				},
+				{
+					"dataset": {
+						"referenceName": "CashierZone3TGT",
+						"type": "DatasetReference"
+					},
+					"name": "CashierTGT"
+				},
+				{
+					"dataset": {
+						"referenceName": "OfferZone3TGT",
+						"type": "DatasetReference"
+					},
+					"name": "OfferTGT"
+				},
+				{
+					"dataset": {
+						"referenceName": "CustomerZone3TGT",
+						"type": "DatasetReference"
+					},
+					"name": "CustomerTGT"
+				},
+				{
+					"dataset": {
+						"referenceName": "SaleTypeZone3TGT",
+						"type": "DatasetReference"
+					},
+					"name": "SaleTypeTGT"
+				},
+				{
+					"dataset": {
+						"referenceName": "AdVehicleZone3TGT",
+						"type": "DatasetReference"
+					},
+					"name": "AdVehicleTGT"
+				},
+				{
+					"dataset": {
+						"referenceName": "OfferIncentivesZone3TGT",
+						"type": "DatasetReference"
+					},
+					"name": "OfferIncentivesTGT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "RetailSalesTempTGT",
+						"type": "DatasetReference"
+					},
+					"name": "sinkTGT"
+				}
+			],
+			"transformations": [
+				{
+					"name": "JoinFactLocation"
+				},
+				{
+					"name": "JoinFactLocationItem"
+				},
+				{
+					"name": "DerivedColumnDate"
+				},
+				{
+					"name": "FilterLocationActive"
+				},
+				{
+					"name": "FilterItemActive"
+				},
+				{
+					"name": "FilterRegisterActive"
+				},
+				{
+					"name": "JoinFactLocationItemRegister"
+				},
+				{
+					"name": "FilterCashierActive"
+				},
+				{
+					"name": "JoinFactLocationItemRegisterCashier"
+				},
+				{
+					"name": "FilterOfferActive"
+				},
+				{
+					"name": "JoinFactLocationItemRegisterCashierOffer"
+				},
+				{
+					"name": "FilterCustomerActive"
+				},
+				{
+					"name": "JoinFactLocationItemRegisterCashierOfferCustomer"
+				},
+				{
+					"name": "FilterSaleTypeActive"
+				},
+				{
+					"name": "JoinFactLocationItemRegisterCashierOfferCustomerSaleType"
+				},
+				{
+					"name": "FilterAdVehicleActive"
+				},
+				{
+					"name": "JoinFactLocationItemRegisterCashierOfferCustomerSaleTypeAdVehicle"
+				},
+				{
+					"name": "FilterIncentivesActive"
+				},
+				{
+					"name": "JoinFactLocationItemRegisterCashierOfferCustomerSaleTypeAdVehicleIncentives"
+				},
+				{
+					"name": "DerivedColumnYearMonth"
+				},
+				{
+					"name": "AggRemoveDups"
+				},
+				{
+					"name": "DerivedCashierPart1"
+				},
+				{
+					"name": "DerivedCashierPart2"
+				},
+				{
+					"name": "Filter1"
+				}
+			],
+			"script": "source(output(\n\t\tBATCH_NUMBER as integer,\n\t\tFISCAL_DATE as string,\n\t\tSTORE_NUMBER as integer,\n\t\tREGISTER as integer,\n\t\tCASHIER_ID as integer,\n\t\tOFFER_ID as long,\n\t\tPOS_CODE as integer,\n\t\tTRANSACTION_TIME as string,\n\t\tCUSTOMER_ID as long,\n\t\tHISTORIC_HOUSEHOLD_ID as string,\n\t\tITEM_ID as long,\n\t\tSCAN_CODE_ID as long,\n\t\tECOMM_TRANS_ID as integer,\n\t\tSALES_TYPE_ID as long,\n\t\tAD_VEHICLE_ID as long,\n\t\tECOMM_FLAG as string,\n\t\tINCENTIVE_ID as integer,\n\t\tHISTORIC_SEGMENT_ID as string,\n\t\tTRANSACTION_NUMBER as long,\n\t\tREGULAR_RETAIL as float,\n\t\tREDEMPTION_SALES as float,\n\t\tPRODUCT_COST as float,\n\t\tPOINTS_ISSUED as integer,\n\t\tPOINTS_REDEEMED as integer,\n\t\tMERCH_SALES as float,\n\t\tMERCH_SCAN_MARGIN as string,\n\t\tUNIT_COUNT as float,\n\t\tITEM_COUNT as integer,\n\t\tWEIGHT as float,\n\t\tMFC_UNITS as float,\n\t\tMONTH_ID as string,\n\t\tDAY_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\twildcardPaths:['internal/LDW/CSV/Sales(POS)/RETAIL_SALE/2021/03/*.csv']) ~> RetailSalesSRC\nsource(output(\n\t\tLocation_Surrogate_Id as long,\n\t\tID as long,\n\t\tStore_Name as string,\n\t\tCurrent_Store_Name as string,\n\t\tStore_Number as integer,\n\t\tCurrent_Store_Number as integer,\n\t\tStore as string,\n\t\tCurrent_Store as string,\n\t\tStore_Address as string,\n\t\tCurrent_Store_Address as string,\n\t\tCity as string,\n\t\tCurrent_City as string,\n\t\tProvince as string,\n\t\tCurrent_Province as string,\n\t\tPostal_Code as string,\n\t\tCurrent_Postal_Code as string,\n\t\tLatitude as double,\n\t\tCurrent_Latitude as double,\n\t\tLongitude as double,\n\t\tCurrent_Longitude as double,\n\t\tSquare_Footage as integer,\n\t\tCurrent_Square_Footage as integer,\n\t\tOpening_Date as date,\n\t\tCurrent_Opening_Date as date,\n\t\tClosing_Date as date,\n\t\tCurrent_Closing_Date as date,\n\t\tRegional_Manager as string,\n\t\tCurrent_Regional_Manager as string,\n\t\tStore_Manager as string,\n\t\tCurrent_Store_Manager as string,\n\t\tDivision as string,\n\t\tCurrent_Division as string,\n\t\tBanner as string,\n\t\tCurrent_Banner as string,\n\t\tBanner_Short_Name as string,\n\t\tCurrent_Banner_Short_Name as string,\n\t\tDivisional_Order as integer,\n\t\tCurrent_Divisional_Order as integer,\n\t\tDivisional_Regional_Rollup as string,\n\t\tCurrent_Divisional_Regional_Rollup as string,\n\t\tRegion_Name as string,\n\t\tCurrent_Region_Name as string,\n\t\tRegion as integer,\n\t\tCurrent_Region as integer,\n\t\tReporting_Region as string,\n\t\tCurrent_Reporting_Region as string,\n\t\tAd_Group_Number as integer,\n\t\tCurrent_Ad_Group_Number as integer,\n\t\tAd_Group_Name as string,\n\t\tCurrent_Ad_Group_Name as string,\n\t\tAd_Group as string,\n\t\tCurrent_Ad_Group as string,\n\t\tPricing_Group_Number as integer,\n\t\tCurrent_Pricing_Group_Number as integer,\n\t\tPricing_Group_Name as string,\n\t\tCurrent_Pricing_Group_Name as string,\n\t\tPricing_Group as string,\n\t\tCurrent_Pricing_Group as string,\n\t\tSame_Store as string,\n\t\tCurrent_Same_Store as string,\n\t\tEcomm_Store as string,\n\t\tCurrent_Ecomm_Store as string,\n\t\tAlg_Store as string,\n\t\tCurrent_Alg_Store as string,\n\t\tOpen_Store as string,\n\t\tCurrent_Open_Store as string,\n\t\tOpen_Converted_Store as string,\n\t\tCurrent_Open_Converted_Store as string,\n\t\tRestaurant_Store as string,\n\t\tCurrent_Restaurant_Store as string,\n\t\tCoffee_Shop_Store as string,\n\t\tCurrent_Coffee_Shop_Store as string,\n\t\tPharmacy_Store as string,\n\t\tCurrent_Pharmacy_Store as string,\n\t\tStore_Type as string,\n\t\tCurrent_Store_Type as string,\n\t\tLocation_Type as string,\n\t\tCurrent_Location_Type as string,\n\t\tLocation_Type_Description as string,\n\t\tCurrent_Location_Type_Description as string,\n\t\tLocation_Group_Type as string,\n\t\tCurrent_Location_Group_Type as string,\n\t\tLocation_Group as string,\n\t\tCurrent_Location_Group as string,\n\t\tEcomm_Open_Date as date,\n\t\tCurrent_Ecomm_Open_Date as date,\n\t\tEcomm_Type as string,\n\t\tCurrent_Ecomm_Type as string,\n\t\tMerch_Program as string,\n\t\tCurrent_Merch_Program as string,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> LocationTGT\nsource(output(\n\t\tItem_Surrogate_Id as long,\n\t\tID as long,\n\t\tLegacy_Item_Code as integer,\n\t\tCurrent_Legacy_Item_Code as integer,\n\t\tVariant_Id as integer,\n\t\tCurrent_Variant_Id as integer,\n\t\tVariant_Name as string,\n\t\tCurrent_Variant_Name as string,\n\t\tVariant as string,\n\t\tCurrent_Variant as string,\n\t\tChinese_Variant as string,\n\t\tCurrent_Chinese_Variant as string,\n\t\tChinese_Variant_Name as string,\n\t\tCurrent_Chinese_Variant_Name as string,\n\t\tLead_Variant_Indicator as integer,\n\t\tCurrent_Lead_Variant_Indicator as integer,\n\t\tLead_Retail_Variant as integer,\n\t\tCurrent_Lead_Retail_Variant as integer,\n\t\tRetail_Size as string,\n\t\tCurrent_Retail_Size as string,\n\t\tRetail_Weight as double,\n\t\tCurrent_Retail_Weight as double,\n\t\tRetail_Pack as integer,\n\t\tCurrent_Retail_Pack as integer,\n\t\tProduct_Status as integer,\n\t\tCurrent_Product_Status as integer,\n\t\tOption_Code as integer,\n\t\tCurrent_Option_Code as integer,\n\t\tTax_Code as integer,\n\t\tCurrent_Tax_Code as integer,\n\t\tFinancial_Sale_Flag as string,\n\t\tCurrent_Financial_Sale_Flag as string,\n\t\tMerch_Sales_Flag as string,\n\t\tCurrent_Merch_Sales_Flag as string,\n\t\tStit as string,\n\t\tCurrent_Stit as string,\n\t\tDPack as string,\n\t\tCurrent_DPack as string,\n\t\tBasket_Type as string,\n\t\tCurrent_Basket_Type as string,\n\t\tStrategic_Group as string,\n\t\tCurrent_Strategic_Group as string,\n\t\tSell_Units as double,\n\t\tCurrent_Sell_Units as double,\n\t\tAmp_Forecast_Item as string,\n\t\tCurrent_Amp_Forecast_Item as string,\n\t\tRepack_Flag as string,\n\t\tCurrent_Repack_Flag as string,\n\t\tLast_Week_Ad_Type as string,\n\t\tCurrent_Last_Week_Ad_Type as string,\n\t\tStore_Report as string,\n\t\tCurrent_Store_Report as string,\n\t\tDepartment_Id as integer,\n\t\tCurrent_Department_Id as integer,\n\t\tDepartment_Name as string,\n\t\tCurrent_Department_Name as string,\n\t\tMerch_Department_Id as integer,\n\t\tCurrent_Merch_Department_Id as integer,\n\t\tMerch_Department as string,\n\t\tCurrent_Merch_Department as string,\n\t\tGL_Department_Id as integer,\n\t\tCurrent_GL_Department_Id as integer,\n\t\tGL_Department_Name as string,\n\t\tCurrent_GL_Department_Name as string,\n\t\tCons_GL_Department_Id as integer,\n\t\tCurrent_Cons_GL_Department_Id as integer,\n\t\tCons_GL_Department as string,\n\t\tCurrent_Cons_GL_Department as string,\n\t\tCons_GL_Department_Name as string,\n\t\tCurrent_Cons_GL_Department_Name as string,\n\t\tCons_Department as string,\n\t\tCurrent_Cons_Department as string,\n\t\tHigh_Level_Department as string,\n\t\tCurrent_High_Level_Department as string,\n\t\tClass_Cat_Id as integer,\n\t\tCurrent_Class_Cat_Id as integer,\n\t\tClass_Cat as string,\n\t\tCurrent_Class_Cat as string,\n\t\tCategory_Id as integer,\n\t\tCurrent_Category_Id as integer,\n\t\tCategory as string,\n\t\tCurrent_Category as string,\n\t\tNew_Class as string,\n\t\tCurrent_Cnew_Class as string,\n\t\tNew_Class_Category as string,\n\t\tCurrent_New_Class_Category as string,\n\t\tNew_Class_Subcategory as string,\n\t\tCurrent_New_Class_Subcategory as string,\n\t\tFamily_Code as string,\n\t\tCurrent_Family_Code as string,\n\t\tFamily_Name as string,\n\t\tCurrent_Family_Name as string,\n\t\tFamily_Id as integer,\n\t\tCurrent_Family_Id as integer,\n\t\tFamily as string,\n\t\tCurrent_Family as string,\n\t\tVendor_Id as string,\n\t\tCurrent_Vendor_Id as string,\n\t\tBrand_Name as string,\n\t\tCurrent_Brand_Name as string,\n\t\tAP_Vendor_Id as string,\n\t\tCurrent_AP_Vendor_Id as string,\n\t\tAP_Vendor_Name as string,\n\t\tCurrent_AP_Vendor_Name as string,\n\t\tAP_Vendor as string,\n\t\tCurrent_AP_Vendor as string,\n\t\tAP_Vendor_Address_Line_1 as string,\n\t\tCurrent_AP_Vendor_Address_Line_1 as string,\n\t\tAP_Vendor_Address_Line_2 as string,\n\t\tCurrent_AP_Vendor_Address_Line_2 as string,\n\t\tAP_Vendor_City as string,\n\t\tCurrent_AP_Vendor_City as string,\n\t\tAP_Vendor_Province as string,\n\t\tCurrent_AP_Vendor_Province as string,\n\t\tCorp_Brand_Description as string,\n\t\tCurrent_Corp_Brand_Description as string,\n\t\tCorp_Brand_Short_Description as string,\n\t\tCurrent_Corp_Brand_Short_Description as string,\n\t\tCorp_Brand_Indicator as string,\n\t\tCurrent_Corp_Brand_Indicator as string,\n\t\tCorp_Brand_Variant_Code as string,\n\t\tCurrent_Corp_Brand_Variant_Code as string,\n\t\tCorp_Brand_Shield as string,\n\t\tCurrent_Corp_Brand_Shield as string,\n\t\tCorp_Brand_Variant as string,\n\t\tCurrent_Corp_Brand_Variant as string,\n\t\tCorp_Brand_Variant_Name as string,\n\t\tCurrent_Corp_Brand_Variant_Name as string,\n\t\tDaymon as string,\n\t\tCurrent_Daymon as string,\n\t\tMerchandiser_Name as string,\n\t\tCurrent_Merchandiser_Name as string,\n\t\tMerchandiser_Number as string,\n\t\tCurrent_Merchandiser_Number as string,\n\t\tMerchandiser as string,\n\t\tCurrent_Merchandiser as string,\n\t\tSCPM as string,\n\t\tCurrent_SCPM as string,\n\t\tGeneral_Manager as string,\n\t\tCurrent_General_Manager as string,\n\t\tVice_President as string,\n\t\tCurrent_Vice_President as string,\n\t\tCB_Director as string,\n\t\tCurrent_CB_Director as string,\n\t\tBusiness_Development_Manager as string,\n\t\tCurrent_Business_Development_Manager as string,\n\t\tListing_Date as date,\n\t\tCurrent_Listing_Date as date,\n\t\tDiscontinue_Date as string,\n\t\tCurrent_Discontinue_Date as string,\n\t\tDiscontinue_Reason as string,\n\t\tCurrent_Discontinue_Reason as string,\n\t\tFamily_Start_Date as date,\n\t\tCurrent_Family_Start_Date as date,\n\t\tFamily_End_Date as date,\n\t\tCurrent_Family_End_Date as date,\n\t\tSource_System_Code as string,\n\t\tCurrent_Source_System_Code as string,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> ItemTGT\nsource(output(\n\t\tRegister_Surrogate_Id as long,\n\t\tID as integer,\n\t\tRegister_Type as string,\n\t\tCurrent_Register_Type as string,\n\t\tEcomm_Lane as string,\n\t\tCurrent_Ecomm_Lane as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> RegisterTGT\nsource(output(\n\t\tCashier_Surrogate_Id as long,\n\t\tID as integer,\n\t\tName as string,\n\t\tCurrent_Name as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> CashierTGT\nsource(output(\n\t\tOffer_Surrogate_Id as long,\n\t\tID as long,\n\t\tOffer as string,\n\t\tCurrent_Offer as string,\n\t\tCoupon_Indicator as string,\n\t\tCurrent_Coupon_Indicator as string,\n\t\tOffer_Type as string,\n\t\tCurrent_Offer_Type as string,\n\t\tBuy_Quantity as double,\n\t\tCurrent_Buy_Quantity as double,\n\t\tGet_Quantity as double,\n\t\tCurrent_Get_Quantity as double,\n\t\tCoupon_Scan_Code as long,\n\t\tCurrent_Coupon_Scan_Code as long,\n\t\tOffer_Segment as string,\n\t\tCurrent_Offer_Segment as string,\n\t\tOffer_Program as string,\n\t\tCurrent_Offer_Program as string,\n\t\tOffer_Threshold_Type as string,\n\t\tCurrent_Offer_Threshold_Type as string,\n\t\tOffer_Redemption_Points as integer,\n\t\tCurrent_Offer_Redemption_Points as integer,\n\t\tOffer_Award_Points as integer,\n\t\tCurrent_Offer_Award_Points as integer,\n\t\tOffer_Threshold_Quantity as integer,\n\t\tCurrent_Offer_Threshold_Quantity as integer,\n\t\tOffer_Source_System as string,\n\t\tCurrent_Offer_Source_System as string,\n\t\tOffer_Reason as string,\n\t\tCurrent_Offer_Reason as string,\n\t\tOffer_Multiple as integer,\n\t\tCurrent_Offer_Multiple as integer,\n\t\tPrice_Type as string,\n\t\tCurrent_Price_Type as string,\n\t\tDeleted_Offer as string,\n\t\tCurrent_Deleted_Offer as string,\n\t\tHot_Offer as string,\n\t\tCurrent_Hot_Offer as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> OfferTGT\nsource(output(\n\t\tCustomer_Surrogate_Id as long,\n\t\tID as long,\n\t\tHousehold_Id as integer,\n\t\tCurrent_Household_Id as integer,\n\t\tCurrent_Card_Number as long,\n\t\tCurrent_Segment_Name as string,\n\t\tCurrent_Current_Segment_Name as string,\n\t\tPrimary_Card_Flag as string,\n\t\tCurrent_Primary_Card_Flag as string,\n\t\tCustomer_Name as string,\n\t\tCurrent_Customer_Name as string,\n\t\tAddress_Status as string,\n\t\tCurrent_Address_Status as string,\n\t\tCustomer_Address as string,\n\t\tCurrent_Customer_Address as string,\n\t\tCurrent_Customer_Phone as string,\n\t\tHousehold_City as string,\n\t\tCurrent_Household_City as string,\n\t\tHousehold_Postal_Code as string,\n\t\tCurrent_Household_Postal_Code as string,\n\t\tCard_Type as string,\n\t\tCurrent_Card_Type as string,\n\t\tNew_Household_Flag as string,\n\t\tCurrent_New_Household_Flag as string,\n\t\tEmail_Status as string,\n\t\tCurrent_Email_Status as string,\n\t\tCurrent_Card_Email as string,\n\t\tCurrent_Ecomm_Email as string,\n\t\tSend_Email_Flag as string,\n\t\tCurrent_Send_Email_Flag as string,\n\t\tSend_Mail_Flag as string,\n\t\tCurrent_Send_Mail_Flag as string,\n\t\tTM_Card_Flag as string,\n\t\tCurrent_TM_Card_Flag as string,\n\t\tTM_Location_Number as integer,\n\t\tCurrent_TM_Location_Number as integer,\n\t\tTM_Household_Flag as string,\n\t\tCurrent_TM_Household_Flag as string,\n\t\tCurrent_Card_Issue_Date as date,\n\t\tCurrent_First_Shop_Date as date,\n\t\tCurrent_Last_Shop_Date as date,\n\t\tPrimary_Store_Number as integer,\n\t\tCurrent_Primary_Store_Number as integer,\n\t\tCurrent_First_Ecomm_Shop_Date as date,\n\t\tCurrent_Last_Ecomm_Shop_Date as date,\n\t\tPrimary_Ecomm_Store_Number as integer,\n\t\tCurrent_Primary_Ecomm_Store_Number as integer,\n\t\tHHN_First_Shop_Date as date,\n\t\tCurrent_HHN_First_Shop_Date as date,\n\t\tHHN_First_Ecomm_Shop_Date as date,\n\t\tCurrent_HHN_First_Ecomm_Shop_Date as date,\n\t\tHousehold_Ecomm_Type as string,\n\t\tCurrent_Household_Ecomm_Type as string,\n\t\tHousehold_Shopping_Chanel as string,\n\t\tCurrent_Household_Shopping_Chanel as string,\n\t\tCurrent_Lifetime_Points_Total as integer,\n\t\tCurrent_Lifetime_Points_Redeem as integer,\n\t\tCurrent_Lifetime_Spend as double,\n\t\tCurrent_Points_Balance as integer,\n\t\tCurrent_Current_Points_Balance as integer,\n\t\tCurrent_Date_Of_Birth as date,\n\t\tCurrent_Age as integer,\n\t\tCurrent_Age_Group as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as long,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> CustomerTGT\nsource(output(\n\t\tSales_Type_Surrogate_Id as long,\n\t\tID as long,\n\t\tSale_Type_Name as string,\n\t\tSale_Type_Current_Name as string,\n\t\tSale_Type_Consolidated_Id as integer,\n\t\tSale_Type_Current_Consolidated_Id as integer,\n\t\tSale_Type_Consolidated_Name as string,\n\t\tSale_Type_Current_Consolidated_Name as string,\n\t\tSale_Type_Rank as integer,\n\t\tSale_Type_Current_Rank as integer,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> SaleTypeTGT\nsource(output(\n\t\tAd_Vehicle_Surrogate_Id as long,\n\t\tID as long,\n\t\tPublication_Entity_Name as string,\n\t\tCurrent_Publication_Entity_Name as string,\n\t\tSection_Name as string,\n\t\tCurrent_Section_Name as string,\n\t\tPage_Number as integer,\n\t\tCurrent_Page_Number as integer,\n\t\tTotal_Pages as integer,\n\t\tCurrent_Total_Pages as integer,\n\t\tSection_Number as integer,\n\t\tCurrent_Section_Number as integer,\n\t\tSpot_Number as integer,\n\t\tCurrent_Spot_Number as integer,\n\t\tSpot_Type as string,\n\t\tCurrent_Spot_Type as string,\n\t\tPage as string,\n\t\tCurrent_Page as string,\n\t\tSection as string,\n\t\tCurrent_Section as string,\n\t\tSpot as string,\n\t\tCurrent_Spot as string,\n\t\tSpot_Position as string,\n\t\tCurrent_Spot_Position as string,\n\t\tVehicle_Offer_Duration as string,\n\t\tCurrent_Vehicle_Offer_Duration as string,\n\t\tSection_Full_Description as string,\n\t\tCurrent_Section_Full_Description as string,\n\t\tSpot_Full_Description as string,\n\t\tCurrent_Spot_Full_Description as string,\n\t\tSpot_Position_Full_Description as string,\n\t\tCurrent_Spot_Position_Full_Description as string,\n\t\tPublication_Version as integer,\n\t\tCurrent_Publication_Version as integer,\n\t\tMain_Ad_Description as string,\n\t\tCurrent_Main_Ad_Description as string,\n\t\tAd_Varieties as string,\n\t\tCurrent_Ad_Varieties as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> AdVehicleTGT\nsource(output(\n\t\tIncentive_Surrogate_Id as long,\n\t\tID as integer,\n\t\tIncentive as string,\n\t\tCurrent_Incentive as string,\n\t\tIncentive_Price_Type as string,\n\t\tCurrent_Incentive_Price_Type as string,\n\t\tRedemption_Type as string,\n\t\tCurrent_Redemption_Type as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> OfferIncentivesTGT\nRetailSalesSRC, AggRemoveDups join(RetailSalesSRC@STORE_NUMBER == AggRemoveDups@STORE_NUMBER,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinFactLocation\nJoinFactLocation, FilterItemActive join(ITEM_ID == ID,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinFactLocationItem\nJoinFactLocationItemRegisterCashierOfferCustomerSaleTypeAdVehicleIncentives derive(o_FISCAL_DATE = toDate(FISCAL_DATE,'MM/dd/yyyy'),\n\t\to_LAST_DML = case( RegisterTGT@Last_Dml == -1 || CashierTGT@Last_Dml == -1 || OfferTGT@Last_Dml == -1 || CustomerTGT@Last_Dml == -1 || SaleTypeTGT@Last_Dml == -1 || AdVehicleTGT@Last_Dml == -1 || OfferIncentivesTGT@Last_Dml == -1, -1, 0)) ~> DerivedColumnDate\nLocationTGT filter(IsActive == 1) ~> FilterLocationActive\nItemTGT filter(IsActive == 1) ~> FilterItemActive\nRegisterTGT filter(IsActive == 1) ~> FilterRegisterActive\nJoinFactLocationItem, FilterRegisterActive join(REGISTER == RegisterTGT@ID,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinFactLocationItemRegister\nCashierTGT filter(IsActive == 1) ~> FilterCashierActive\nDerivedCashierPart2, FilterCashierActive join(o_Cashier_ID == CashierTGT@ID,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinFactLocationItemRegisterCashier\nOfferTGT filter(IsActive == 1) ~> FilterOfferActive\nJoinFactLocationItemRegisterCashier, FilterOfferActive join(OFFER_ID == OfferTGT@ID,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinFactLocationItemRegisterCashierOffer\nCustomerTGT filter(IsActive == 1) ~> FilterCustomerActive\nJoinFactLocationItemRegisterCashierOffer, FilterCustomerActive join(CUSTOMER_ID == CustomerTGT@ID,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinFactLocationItemRegisterCashierOfferCustomer\nSaleTypeTGT filter(IsActive == 1) ~> FilterSaleTypeActive\nJoinFactLocationItemRegisterCashierOfferCustomer, FilterSaleTypeActive join(SALES_TYPE_ID == SaleTypeTGT@ID,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinFactLocationItemRegisterCashierOfferCustomerSaleType\nAdVehicleTGT filter(IsActive == 1) ~> FilterAdVehicleActive\nJoinFactLocationItemRegisterCashierOfferCustomerSaleType, AdVehicleTGT join(AD_VEHICLE_ID == AdVehicleTGT@ID,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinFactLocationItemRegisterCashierOfferCustomerSaleTypeAdVehicle\nOfferIncentivesTGT filter(IsActive == 1) ~> FilterIncentivesActive\nJoinFactLocationItemRegisterCashierOfferCustomerSaleTypeAdVehicle, FilterIncentivesActive join(INCENTIVE_ID == OfferIncentivesTGT@ID,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinFactLocationItemRegisterCashierOfferCustomerSaleTypeAdVehicleIncentives\nDerivedColumnDate derive(Year = year(o_FISCAL_DATE),\n\t\tMonth = month(o_FISCAL_DATE)) ~> DerivedColumnYearMonth\nFilterLocationActive aggregate(groupBy(STORE_NUMBER = Store_Number),\n\to_Location_Surrogate_ID = max(Location_Surrogate_Id)) ~> AggRemoveDups\nJoinFactLocationItemRegister derive(o_Cashier_part1 = toInteger(left(toString(CASHIER_ID),length(toString(CASHIER_ID)) -3)),\n\t\to_Cashier_part2 = toInteger(right((toString(CASHIER_ID)), 3))) ~> DerivedCashierPart1\nDerivedCashierPart1 derive(o_Cashier_ID = (o_Cashier_part1 * 10000) + o_Cashier_part2) ~> DerivedCashierPart2\nDerivedColumnYearMonth filter(TRANSACTION_NUMBER == 1067040511) ~> Filter1\nFilter1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tTransaction_Number as long,\n\t\tItem_Surrogate_Id as long,\n\t\tFiscal_Date as date,\n\t\tLocation_Surrogate_Id as long,\n\t\tRegister_Surrogate_Id as long,\n\t\tCashier_Surrogate_Id as long,\n\t\tOffer_Surrogate_Id as long,\n\t\tPOS_Code as integer,\n\t\tTransaction_Time as string,\n\t\tCustomer_Surrogate_Id as long,\n\t\tScan_Code_Id as long,\n\t\tEcomm_Trans_Id as integer,\n\t\tSales_Type_Surrogate_Id as long,\n\t\tBatch_Number as integer,\n\t\tAd_Vehicle_Surrogate_Id as long,\n\t\tEcomm_Flag as string,\n\t\tIncentive_Surrogate_Id as long,\n\t\tRegular_Retail as double,\n\t\tRedemption_Sales as double,\n\t\tProduct_Cost as double,\n\t\tPoints_Issued as integer,\n\t\tPoints_Redeemed as integer,\n\t\tMerch_Sales as double,\n\t\tUnit_Count as double,\n\t\tItem_Count as integer,\n\t\tWeight as double,\n\t\tMfc_Units as double,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tYear as integer,\n\t\tMonth as integer\n\t),\n\tformat: 'parquet',\n\tmapColumn(\n\t\tTransaction_Number = TRANSACTION_NUMBER,\n\t\tItem_Surrogate_Id,\n\t\tFiscal_Date = o_FISCAL_DATE,\n\t\tLocation_Surrogate_Id = o_Location_Surrogate_ID,\n\t\tRegister_Surrogate_Id,\n\t\tCashier_Surrogate_Id,\n\t\tOffer_Surrogate_Id,\n\t\tPOS_Code = POS_CODE,\n\t\tTransaction_Time = TRANSACTION_TIME,\n\t\tCustomer_Surrogate_Id,\n\t\tScan_Code_Id = SCAN_CODE_ID,\n\t\tEcomm_Trans_Id = ECOMM_TRANS_ID,\n\t\tSales_Type_Surrogate_Id,\n\t\tBatch_Number = BATCH_NUMBER,\n\t\tAd_Vehicle_Surrogate_Id,\n\t\tEcomm_Flag = ECOMM_FLAG,\n\t\tIncentive_Surrogate_Id,\n\t\tRegular_Retail = REGULAR_RETAIL,\n\t\tRedemption_Sales = REDEMPTION_SALES,\n\t\tProduct_Cost = PRODUCT_COST,\n\t\tPoints_Issued = POINTS_ISSUED,\n\t\tPoints_Redeemed = POINTS_REDEEMED,\n\t\tMerch_Sales = MERCH_SALES,\n\t\tUnit_Count = UNIT_COUNT,\n\t\tItem_Count = ITEM_COUNT,\n\t\tWeight = WEIGHT,\n\t\tMfc_Units = MFC_UNITS,\n\t\tLast_Changed = CustomerTGT@Last_Changed,\n\t\tLast_Dml = o_LAST_DML,\n\t\tYear,\n\t\tMonth\n\t),\n\tpartitionBy('dynamicRange', 12,\n\t\tYear,\n\t\tMonth\n\t)) ~> sinkTGT"
+		}
+	}
+}

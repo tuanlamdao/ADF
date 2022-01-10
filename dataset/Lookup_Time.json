@@ -1,0 +1,129 @@
+{
+	"name": "Lookup_Time",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "WEEK_ENDING_DATE",
+				"type": "date"
+			},
+			{
+				"name": "PERIOD_NUMBER",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "QUARTER_ENDING_DATE",
+				"type": "date"
+			},
+			{
+				"name": "YEAR_ENDING_DATE",
+				"type": "date"
+			},
+			{
+				"name": "WEEK_NUMBER",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "PERIOD_ENDING_DATE",
+				"type": "date"
+			},
+			{
+				"name": "QUARTER_NUMBER",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "YEAR_NUMBER",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "CALENDAR_DATE",
+				"type": "date"
+			},
+			{
+				"name": "CY_YEAR",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "CY_PERIOD",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "CY_START",
+				"type": "date"
+			},
+			{
+				"name": "CY_PERIOD_END",
+				"type": "date"
+			},
+			{
+				"name": "PY_YEAR",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "PY_PERIOD",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "PY_START",
+				"type": "date"
+			},
+			{
+				"name": "PY_PERIOD_END",
+				"type": "date"
+			},
+			{
+				"name": "FLYER_YEAR_NUMBER",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "FLYER_WEEK_NUMBER",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "FLYER_WEEK_ENDING_DATE",
+				"type": "date"
+			},
+			{
+				"name": "FLYER_PERIOD_NUMBER",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "Run_by",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Run_Time",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "lookup_time"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

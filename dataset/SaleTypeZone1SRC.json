@@ -1,0 +1,77 @@
+{
+	"name": "SaleTypeZone1SRC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSV",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SrcContainer": {
+				"type": "String",
+				"defaultValue": "retail-data"
+			},
+			"SrcDIR": {
+				"type": "String",
+				"defaultValue": "internal/LDW/CSV/Sales(POS)/SALE_TYPE/2020/10/UNPROCESSED"
+			},
+			"SrcFileName": {
+				"type": "String",
+				"defaultValue": "SALE_TYPE_20200915-20201022.csv"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().SrcFileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().SrcDIR",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().SrcContainer",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "NAME",
+				"type": "String"
+			},
+			{
+				"name": "CONSOLIDATED_ID",
+				"type": "String"
+			},
+			{
+				"name": "CONSOLIDATED_NAME",
+				"type": "String"
+			},
+			{
+				"name": "RANK",
+				"type": "String"
+			},
+			{
+				"name": "LAST_CHANGED",
+				"type": "String"
+			},
+			{
+				"name": "LAST_DML",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

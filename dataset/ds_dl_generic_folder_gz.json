@@ -1,0 +1,41 @@
+{
+	"name": "ds_dl_generic_folder_gz",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_dl_generic",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FolderName": {
+				"type": "String"
+			},
+			"StartDateTime": {
+				"type": "string"
+			},
+			"EndDateTime": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureBlobFSFile",
+		"typeProperties": {
+			"compression": {
+				"type": "GZip",
+				"level": "Optimal"
+			},
+			"folderPath": {
+				"value": "@dataset().FolderName",
+				"type": "Expression"
+			},
+			"modifiedDatetimeStart": {
+				"value": "@dataset().StartDateTime",
+				"type": "Expression"
+			},
+			"modifiedDatetimeEnd": {
+				"value": "@dataset().EndDateTime",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

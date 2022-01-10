@@ -1,0 +1,293 @@
+{
+	"name": "Orch_Files_To_STD",
+	"properties": {
+		"activities": [
+			{
+				"name": "listOfRawFiles",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[ETL].[GET_THE_LIST_OF_RAW_FILES]",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_etl_generic",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "StandardizeFile",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "listOfRawFiles",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('listOfRawFiles').output.value",
+						"type": "Expression"
+					},
+					"batchCount": 32,
+					"activities": [
+						{
+							"name": "Zip or UnZip",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "SetTheProcessingStatus",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(item().UnZip, 1)",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Files_Move",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [
+											{
+												"name": "Source",
+												"value": "@{replace(item().FilePath, item().SourceFileName, '')}/@{Item().SourceFileName}"
+											},
+											{
+												"name": "Destination",
+												"value": "@{replace(replace(item().FilePath, item().SourceFileName, ''), 'raw', 'std')}/@{item().SourceFileName}"
+											}
+										],
+										"typeProperties": {
+											"source": {
+												"type": "AzureBlobFSSource",
+												"recursive": true
+											},
+											"sink": {
+												"type": "AzureBlobFSSink"
+											},
+											"enableStaging": false
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_dl_generic_src",
+												"type": "DatasetReference",
+												"parameters": {
+													"FileName": {
+														"value": "@Item().Source_File_Name",
+														"type": "Expression"
+													},
+													"FolderName": {
+														"value": "@replace(item().File_Path, item().Source_File_Name, '')",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ds_dl_generic_dest",
+												"type": "DatasetReference",
+												"parameters": {
+													"FileName": {
+														"value": "@item().Source_File_Name",
+														"type": "Expression"
+													},
+													"FolderName": {
+														"value": "@replace(replace(item().File_Path, item().Source_File_Name, ''), 'raw', 'std')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Unzip the files",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [
+											{
+												"name": "Source",
+												"value": "@{replace(item().File_Path, item().Source_File_Name, '')}/@{Item().Source_File_Name}"
+											},
+											{
+												"name": "Destination",
+												"value": "@{replace(replace(item().File_Path, item().Source_File_Name, ''), 'raw', 'std')}/"
+											}
+										],
+										"typeProperties": {
+											"source": {
+												"type": "AzureBlobFSSource",
+												"recursive": true
+											},
+											"sink": {
+												"type": "AzureBlobFSSink"
+											},
+											"enableStaging": false
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_dl_generic_gz",
+												"type": "DatasetReference",
+												"parameters": {
+													"FolderName": {
+														"value": "@replace(item().File_Path, item().Source_File_Name, '')",
+														"type": "Expression"
+													},
+													"StartDateTime": {
+														"value": "@null",
+														"type": "Expression"
+													},
+													"EndDateTime": {
+														"value": "@null",
+														"type": "Expression"
+													},
+													"FileName": {
+														"value": "@Item().Source_File_Name",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ds_dl_generic_folder",
+												"type": "DatasetReference",
+												"parameters": {
+													"FolderName": {
+														"value": "@replace(replace(item().File_Path, item().Source_File_Name, ''), 'raw', 'std')",
+														"type": "Expression"
+													},
+													"StartDateTime": {
+														"value": "@Null",
+														"type": "Expression"
+													},
+													"EndDateTime": {
+														"value": "@Null",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								]
+							}
+						},
+						{
+							"name": "SetTheProcessingStatus",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[ETL].[WATERMARK_STATUS_SETTER]",
+								"storedProcedureParameters": {
+									"Status": {
+										"value": "11-PROCESSING",
+										"type": "String"
+									},
+									"Watermark_Id": {
+										"value": {
+											"value": "@item().Id",
+											"type": "Expression"
+										},
+										"type": "Int64"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_sql_ETL",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "SetTheSTDStatus",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "Zip or UnZip",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[ETL].[WATERMARK_STATUS_SETTER]",
+								"storedProcedureParameters": {
+									"Status": {
+										"value": "20-STD",
+										"type": "String"
+									},
+									"Watermark_Id": {
+										"value": {
+											"value": "@item().Id",
+											"type": "Expression"
+										},
+										"type": "Int64"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_sql_ETL",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-01-24T02:17:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

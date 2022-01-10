@@ -1,0 +1,177 @@
+{
+	"name": "RetailSalesZone1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSV",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SrcContainer": {
+				"type": "String",
+				"defaultValue": "retail-data"
+			},
+			"SrcDIR": {
+				"type": "String",
+				"defaultValue": "internal/LDW/CSV/Sales(POS)/RETAIL_SALE/2021/03"
+			},
+			"SrcFileName": {
+				"type": "String",
+				"defaultValue": "RETAIL_SALE_20210301_051804.csv"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().SrcFileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().SrcDIR",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().SrcContainer",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "BATCH_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "FISCAL_DATE",
+				"type": "String"
+			},
+			{
+				"name": "STORE_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "REGISTER",
+				"type": "String"
+			},
+			{
+				"name": "CASHIER_ID",
+				"type": "String"
+			},
+			{
+				"name": "OFFER_ID",
+				"type": "String"
+			},
+			{
+				"name": "POS_CODE",
+				"type": "String"
+			},
+			{
+				"name": "TRANSACTION_TIME",
+				"type": "String"
+			},
+			{
+				"name": "CUSTOMER_ID",
+				"type": "String"
+			},
+			{
+				"name": "HISTORIC_HOUSEHOLD_ID",
+				"type": "String"
+			},
+			{
+				"name": "ITEM_ID",
+				"type": "String"
+			},
+			{
+				"name": "SCAN_CODE_ID",
+				"type": "String"
+			},
+			{
+				"name": "ECOMM_TRANS_ID",
+				"type": "String"
+			},
+			{
+				"name": "SALES_TYPE_ID",
+				"type": "String"
+			},
+			{
+				"name": "AD_VEHICLE_ID",
+				"type": "String"
+			},
+			{
+				"name": "ECOMM_FLAG",
+				"type": "String"
+			},
+			{
+				"name": "INCENTIVE_ID",
+				"type": "String"
+			},
+			{
+				"name": "HISTORIC_SEGMENT_ID",
+				"type": "String"
+			},
+			{
+				"name": "TRANSACTION_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "REGULAR_RETAIL",
+				"type": "String"
+			},
+			{
+				"name": "REDEMPTION_SALES",
+				"type": "String"
+			},
+			{
+				"name": "PRODUCT_COST",
+				"type": "String"
+			},
+			{
+				"name": "POINTS_ISSUED",
+				"type": "String"
+			},
+			{
+				"name": "POINTS_REDEEMED",
+				"type": "String"
+			},
+			{
+				"name": "MERCH_SALES",
+				"type": "String"
+			},
+			{
+				"name": "MERCH_SCAN_MARGIN",
+				"type": "String"
+			},
+			{
+				"name": "UNIT_COUNT",
+				"type": "String"
+			},
+			{
+				"name": "ITEM_COUNT",
+				"type": "String"
+			},
+			{
+				"name": "WEIGHT",
+				"type": "String"
+			},
+			{
+				"name": "MFC_UNITS",
+				"type": "String"
+			},
+			{
+				"name": "MONTH_ID",
+				"type": "String"
+			},
+			{
+				"name": "DAY_ID",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

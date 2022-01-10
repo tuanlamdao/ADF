@@ -1,0 +1,69 @@
+{
+	"name": "RegisterZone1SRC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSV",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SrcContainer": {
+				"type": "String",
+				"defaultValue": "retail-data"
+			},
+			"SrcDIR": {
+				"type": "String",
+				"defaultValue": "internal/LDW/CSV/Sales(POS)/REGISTER/2020/11/UNPROCESSED"
+			},
+			"SrcFileName": {
+				"type": "String",
+				"defaultValue": "REGISTER_20201022_152308.csv"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().SrcFileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().SrcDIR",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().SrcContainer",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "REGISTER_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "ECOMM_LANE",
+				"type": "String"
+			},
+			{
+				"name": "LAST_CHANGED",
+				"type": "String"
+			},
+			{
+				"name": "LAST_DML",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

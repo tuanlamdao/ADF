@@ -1,0 +1,39 @@
+{
+	"name": "PassEmptyFileZone1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSVZone1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TgtPassContainer": {
+				"type": "String",
+				"defaultValue": "master-data"
+			},
+			"TgtPassDIR": {
+				"type": "String",
+				"defaultValue": "internal/LDW/CSV/EmptyFileCheck/AdVehicle/Pass"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@dataset().TgtPassDIR",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().TgtPassContainer",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

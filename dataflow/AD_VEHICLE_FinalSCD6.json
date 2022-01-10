@@ -1,0 +1,28 @@
+{
+	"name": "AD_VEHICLE_FinalSCD6",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "AdVehicleReadMultipleTempParquetFiles",
+						"type": "DatasetReference"
+					},
+					"name": "AdVehicleMultipleParquetFiles"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AdVehicleParquetTGT",
+						"type": "DatasetReference"
+					},
+					"name": "sinkAdVehicleFinal"
+				}
+			],
+			"transformations": [],
+			"script": "source(output(\n\t\tAd_Vehicle_Surrogate_Id as long,\n\t\tID as long,\n\t\tPublication_Entity_Name as string,\n\t\tCurrent_Publication_Entity_Name as string,\n\t\tSection_Name as string,\n\t\tCurrent_Section_Name as string,\n\t\tPage_Number as integer,\n\t\tCurrent_Page_Number as integer,\n\t\tTotal_Pages as integer,\n\t\tCurrent_Total_Pages as integer,\n\t\tSection_Number as integer,\n\t\tCurrent_Section_Number as integer,\n\t\tSpot_Number as integer,\n\t\tCurrent_Spot_Number as integer,\n\t\tSpot_Type as string,\n\t\tCurrent_Spot_Type as string,\n\t\tPage as string,\n\t\tCurrent_Page as string,\n\t\tSection as string,\n\t\tCurrent_Section as string,\n\t\tSpot as string,\n\t\tCurrent_Spot as string,\n\t\tSpot_Position as string,\n\t\tCurrent_Spot_Position as string,\n\t\tVehicle_Offer_Duration as string,\n\t\tCurrent_Vehicle_Offer_Duration as string,\n\t\tSection_Full_Description as string,\n\t\tCurrent_Section_Full_Description as string,\n\t\tSpot_Full_Description as string,\n\t\tCurrent_Spot_Full_Description as string,\n\t\tSpot_Position_Full_Description as string,\n\t\tCurrent_Spot_Position_Full_Description as string,\n\t\tPublication_Version as integer,\n\t\tCurrent_Publication_Version as integer,\n\t\tMain_Ad_Description as string,\n\t\tCurrent_Main_Ad_Description as string,\n\t\tAd_Varieties as string,\n\t\tCurrent_Ad_Varieties as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet',\n\twildcardPaths:['Internal/LDW/Parquet/Offer&Promotion-DIM/AD_VEHICLE/Temp/*.parquet']) ~> AdVehicleMultipleParquetFiles\nAdVehicleMultipleParquetFiles sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tAd_Vehicle_Surrogate_Id as long,\n\t\tID as long,\n\t\tPublication_Entity_Name as string,\n\t\tCurrent_Publication_Entity_Name as string,\n\t\tSection_Name as string,\n\t\tCurrent_Section_Name as string,\n\t\tPage_Number as integer,\n\t\tCurrent_Page_Number as integer,\n\t\tTotal_Pages as integer,\n\t\tCurrent_Total_Pages as integer,\n\t\tSection_Number as integer,\n\t\tCurrent_Section_Number as integer,\n\t\tSpot_Number as integer,\n\t\tCurrent_Spot_Number as integer,\n\t\tSpot_Type as string,\n\t\tCurrent_Spot_Type as string,\n\t\tPage as string,\n\t\tCurrent_Page as string,\n\t\tSection as string,\n\t\tCurrent_Section as string,\n\t\tSpot as string,\n\t\tCurrent_Spot as string,\n\t\tSpot_Position as string,\n\t\tCurrent_Spot_Position as string,\n\t\tVehicle_Offer_Duration as string,\n\t\tCurrent_Vehicle_Offer_Duration as string,\n\t\tSection_Full_Description as string,\n\t\tCurrent_Section_Full_Description as string,\n\t\tSpot_Full_Description as string,\n\t\tCurrent_Spot_Full_Description as string,\n\t\tSpot_Position_Full_Description as string,\n\t\tCurrent_Spot_Position_Full_Description as string,\n\t\tPublication_Version as integer,\n\t\tCurrent_Publication_Version as integer,\n\t\tMain_Ad_Description as string,\n\t\tCurrent_Main_Ad_Description as string,\n\t\tAd_Varieties as string,\n\t\tCurrent_Ad_Varieties as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['DIM_AD_VEHICLE.parquet'],\n\tmapColumn(\n\t\tAd_Vehicle_Surrogate_Id,\n\t\tID,\n\t\tPublication_Entity_Name,\n\t\tCurrent_Publication_Entity_Name,\n\t\tSection_Name,\n\t\tCurrent_Section_Name,\n\t\tPage_Number,\n\t\tCurrent_Page_Number,\n\t\tTotal_Pages,\n\t\tCurrent_Total_Pages,\n\t\tSection_Number,\n\t\tCurrent_Section_Number,\n\t\tSpot_Number,\n\t\tCurrent_Spot_Number,\n\t\tSpot_Type,\n\t\tCurrent_Spot_Type,\n\t\tPage,\n\t\tCurrent_Page,\n\t\tSection,\n\t\tCurrent_Section,\n\t\tSpot,\n\t\tCurrent_Spot,\n\t\tSpot_Position,\n\t\tCurrent_Spot_Position,\n\t\tVehicle_Offer_Duration,\n\t\tCurrent_Vehicle_Offer_Duration,\n\t\tSection_Full_Description,\n\t\tCurrent_Section_Full_Description,\n\t\tSpot_Full_Description,\n\t\tCurrent_Spot_Full_Description,\n\t\tSpot_Position_Full_Description,\n\t\tCurrent_Spot_Position_Full_Description,\n\t\tPublication_Version,\n\t\tCurrent_Publication_Version,\n\t\tMain_Ad_Description,\n\t\tCurrent_Main_Ad_Description,\n\t\tAd_Varieties,\n\t\tCurrent_Ad_Varieties,\n\t\tLast_Changed,\n\t\tLast_Dml,\n\t\tEff_Start_Dt,\n\t\tEff_End_Dt,\n\t\tIsActive,\n\t\tCrc_Val\n\t),\n\tpartitionBy('hash', 1)) ~> sinkAdVehicleFinal"
+		}
+	}
+}

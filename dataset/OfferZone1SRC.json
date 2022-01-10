@@ -1,0 +1,133 @@
+{
+	"name": "OfferZone1SRC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSVZone1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SrcContainer": {
+				"type": "String",
+				"defaultValue": "retail-data"
+			},
+			"SrcDIR": {
+				"type": "String",
+				"defaultValue": "internal/LDW/CSV/Offer&Promotion/OFFER/2020/10/UNPROCESSED"
+			},
+			"SrcFileName": {
+				"type": "String",
+				"defaultValue": "OFFER_20201023_152453.csv"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().SrcFileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().SrcDIR",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().SrcContainer",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "OFFER",
+				"type": "String"
+			},
+			{
+				"name": "COUPON_INDICATOR",
+				"type": "String"
+			},
+			{
+				"name": "OFFER_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "BUY_QUANTITY",
+				"type": "String"
+			},
+			{
+				"name": "GET_QUANTITY",
+				"type": "String"
+			},
+			{
+				"name": "COUPON_SCAN_CODE",
+				"type": "String"
+			},
+			{
+				"name": "OFFER_SEGMENT",
+				"type": "String"
+			},
+			{
+				"name": "OFFER_PROGRAM",
+				"type": "String"
+			},
+			{
+				"name": "OFFER_THRESHOLD_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "OFFER_REDEMPTION_POINTS",
+				"type": "String"
+			},
+			{
+				"name": "OFFER_AWARD_POINTS",
+				"type": "String"
+			},
+			{
+				"name": "OFFER_THRESHOLD_QUANTITY",
+				"type": "String"
+			},
+			{
+				"name": "OFFER_SOURCE_SYSTEM",
+				"type": "String"
+			},
+			{
+				"name": "OFFER_REASON",
+				"type": "String"
+			},
+			{
+				"name": "OFFER_MULTIPLE",
+				"type": "String"
+			},
+			{
+				"name": "PRICE_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "DELETED_OFFER",
+				"type": "String"
+			},
+			{
+				"name": "HOT_OFFER",
+				"type": "String"
+			},
+			{
+				"name": "LAST_CHANGED",
+				"type": "String"
+			},
+			{
+				"name": "LAST_DML",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

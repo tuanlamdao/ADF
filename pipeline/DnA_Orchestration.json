@@ -1,0 +1,110 @@
+{
+	"name": "DnA_Orchestration",
+	"properties": {
+		"activities": [
+			{
+				"name": "Triage and Move files to RAW zone",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Triage_Received_Files",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"DL_FilesInTransit_Account": {
+							"value": "@pipeline().parameters.DL_FilesInTransit_Account",
+							"type": "Expression"
+						},
+						"DL_FilesInTransit_TopFolder": {
+							"value": "@pipeline().parameters.DL_FilesInTransit_TopFolder",
+							"type": "Expression"
+						},
+						"DL_FilesInTransit_Path": {
+							"value": "@pipeline().parameters.DL_FilesInTransit_Path",
+							"type": "Expression"
+						},
+						"SourceSystemName": {
+							"value": "@pipeline().parameters.SourceSystemName",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Move files to STD zone",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Triage and Move files to RAW zone",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Orch_Files_To_STD",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Move files to ToIngest",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Move files to STD zone",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Orch_Files_To_ToIngest",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"DL_TopFolder": {
+							"value": "@pipeline().parameters.DL_FilesInTransit_TopFolder",
+							"type": "Expression"
+						},
+						"IICS_Ingestion_Path": "InTransit/ToIngest"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"DL_FilesInTransit_Account": {
+				"type": "string",
+				"defaultValue": "ofdwqadnasa001"
+			},
+			"DL_FilesInTransit_TopFolder": {
+				"type": "string",
+				"defaultValue": "owfg-dna-dl"
+			},
+			"DL_FilesInTransit_Path": {
+				"type": "string",
+				"defaultValue": "InTransit/ReceivingRepository"
+			},
+			"SourceSystemName": {
+				"type": "string",
+				"defaultValue": "QlikView"
+			},
+			"IICS_Ingestion_Path": {
+				"type": "string",
+				"defaultValue": "ToIngest"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-01-24T02:17:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

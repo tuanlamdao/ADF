@@ -1,0 +1,177 @@
+{
+	"name": "CSVZone2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage2CSV",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "internal/LDW/CSV/Sales(POS)/OFDW-POS_DAILY_STORE_ITEM_HH/2020/10",
+				"container": "retail-data"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "WEEK_ENDING_DATE",
+				"type": "String"
+			},
+			{
+				"name": "FISCAL_DATE",
+				"type": "String"
+			},
+			{
+				"name": "LOCATION_ID",
+				"type": "String"
+			},
+			{
+				"name": "ITEM_ID",
+				"type": "String"
+			},
+			{
+				"name": "OFFER_ID",
+				"type": "String"
+			},
+			{
+				"name": "CX",
+				"type": "String"
+			},
+			{
+				"name": "HHN",
+				"type": "String"
+			},
+			{
+				"name": "TOTAL_SALES_QUANTITY",
+				"type": "String"
+			},
+			{
+				"name": "TOTAL_SALES_WEIGHT",
+				"type": "String"
+			},
+			{
+				"name": "TOTAL_SALES_DOLLARS",
+				"type": "String"
+			},
+			{
+				"name": "EXTENDED_COST",
+				"type": "String"
+			},
+			{
+				"name": "OWT_POINTS",
+				"type": "String"
+			},
+			{
+				"name": "REDEMPTION_POINTS",
+				"type": "String"
+			},
+			{
+				"name": "BATCH_NUM",
+				"type": "String"
+			},
+			{
+				"name": "SEGID",
+				"type": "String"
+			},
+			{
+				"name": "TRANSACTION_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "SCAN_CODE",
+				"type": "String"
+			},
+			{
+				"name": "TRANSACTION_DT",
+				"type": "String"
+			},
+			{
+				"name": "REGISTER_LANE",
+				"type": "String"
+			},
+			{
+				"name": "CASHIER_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "POS_CODE",
+				"type": "String"
+			},
+			{
+				"name": "COUPON_SCAN_CODE",
+				"type": "String"
+			},
+			{
+				"name": "COUPON_COUNT",
+				"type": "String"
+			},
+			{
+				"name": "LANDED_BRANCH_COST",
+				"type": "String"
+			},
+			{
+				"name": "COST_UOM_CD",
+				"type": "String"
+			},
+			{
+				"name": "REGULAR_RETAIL_QTY",
+				"type": "String"
+			},
+			{
+				"name": "REGULAR_RETAIL_PRICE",
+				"type": "String"
+			},
+			{
+				"name": "INCENTIVE_ID",
+				"type": "String"
+			},
+			{
+				"name": "WAREHOUSE_ITEM_ID",
+				"type": "String"
+			},
+			{
+				"name": "REDEMPTION_SALES_UNITS",
+				"type": "String"
+			},
+			{
+				"name": "MFC_DISCOUNT_QTY",
+				"type": "String"
+			},
+			{
+				"name": "MFC_DISCOUNT_AMT",
+				"type": "String"
+			},
+			{
+				"name": "MFC_OFFER_ID",
+				"type": "String"
+			},
+			{
+				"name": "OFG_OFFER_ID",
+				"type": "String"
+			},
+			{
+				"name": "OFG_DISCOUNT_QTY",
+				"type": "String"
+			},
+			{
+				"name": "OFG_DISCOUNT_AMT",
+				"type": "String"
+			},
+			{
+				"name": "DGT_OFFER_POINTS",
+				"type": "String"
+			},
+			{
+				"name": "MERCH_PROG_ID",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,32 @@
+{
+	"name": "CUSTOMER_InitialSCD6_copy1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CustomerZone1SRC",
+						"type": "DatasetReference"
+					},
+					"name": "CustomerParquetSCD"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Zone3Parquet_Testing",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Filter1"
+				}
+			],
+			"script": "source(output(\n\t\tID as string,\n\t\tHOUSEHOLD_ID as string,\n\t\tCARD_NUMBER as long,\n\t\tCURRENT_SEGMENT_NAME as string,\n\t\tPRIMARY_CARD_FLAG as string,\n\t\tCUSTOMER_NAME as string,\n\t\tADDRESS_STATUS as string,\n\t\tCUSTOMER_ADDRESS as string,\n\t\tCUSTOMER_PHONE as string,\n\t\tHOUSEHOLD_CITY as string,\n\t\tHOUSEHOLD_POSTAL_CODE as string,\n\t\tCARD_TYPE as string,\n\t\tNEW_HOUSEHOLD_FLAG as string,\n\t\tEMAIL_STATUS as string,\n\t\tCARD_EMAIL as string,\n\t\tECOMM_EMAIL as string,\n\t\tSEND_EMAIL_FLAG as string,\n\t\tSEND_MAIL_FLAG as string,\n\t\tTM_CARD_FLAG as string,\n\t\tTM_LOCATION_NUMBER as string,\n\t\tTM_HOUSEHOLD_FLAG as string,\n\t\tCARD_ISSUE_DATE as string,\n\t\tFIRST_SHOP_DATE as string,\n\t\tLAST_SHOP_DATE as string,\n\t\tPRIMARY_STORE_NUMBER as string,\n\t\tFIRST_ECOMM_SHOP_DATE as string,\n\t\tLAST_ECOMM_SHOP_DATE as string,\n\t\tPRIMARY_ECOMM_STORE_NUMBER as string,\n\t\tHHN_FIRST_SHOP_DATE as string,\n\t\tHHN_FIRST_ECOMM_SHOP_DATE as string,\n\t\tHOUSEHOLD_ECOMM_TYPE as string,\n\t\tHOUSEHOLD_SHOPPING_CHANEL as string,\n\t\tLIFETIME_POINTS_TOTAL as string,\n\t\tLIFETIME_POINTS_REDEEM as string,\n\t\tLIFETIME_SPEND as string,\n\t\tCURRENT_POINTS_BALANCE as string,\n\t\tDATE_OF_BIRTH as string,\n\t\tAGE as string,\n\t\tAGE_GROUP as string,\n\t\tLAST_CHANGED as string,\n\t\tLAST_DML as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> CustomerParquetSCD\nCustomerParquetSCD filter(toInteger(ID)==10626089) ~> Filter1\nFilter1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}

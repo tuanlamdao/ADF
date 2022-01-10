@@ -1,0 +1,312 @@
+{
+	"name": "Orch_Files_To_Raw",
+	"properties": {
+		"activities": [
+			{
+				"name": "DeleteStagingFolder",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "processAllFiles",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_dl_generic_folder_no_DataRange",
+						"type": "DatasetReference",
+						"parameters": {
+							"FolderName": {
+								"value": "@{pipeline().parameters.DL_FilesInTransit_TopFolder}/@{pipeline().parameters.DL_FilesInTransit_Path}/@{pipeline().parameters.StagingFolderName}",
+								"type": "Expression"
+							}
+						}
+					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "ls_dl_generic",
+							"type": "LinkedServiceReference"
+						},
+						"path": {
+							"value": "@concat(pipeline().parameters.DL_FilesInTransit_TopFolder, '/',pipeline().parameters.DL_FilesInTransit_Path,'_Delete_Log')",
+							"type": "Expression"
+						}
+					},
+					"enableLogging": true,
+					"recursive": true
+				}
+			},
+			{
+				"name": "GetListOfFiles",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_dl_generic_folder_gz",
+						"type": "DatasetReference",
+						"parameters": {
+							"FolderName": {
+								"value": "@{pipeline().parameters.DL_FilesInTransit_TopFolder}/@{pipeline().parameters.DL_FilesInTransit_Path}/@{pipeline().parameters.StagingFolderName}",
+								"type": "Expression"
+							},
+							"StartDateTime": {
+								"value": "@null",
+								"type": "Expression"
+							},
+							"EndDateTime": {
+								"value": "@null",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [
+						"childItems"
+					]
+				}
+			},
+			{
+				"name": "processAllFiles",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "GetListOfFiles",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('GetListOfFiles').output.childItems",
+						"type": "Expression"
+					},
+					"batchCount": 32,
+					"activities": [
+						{
+							"name": "GetTargetFolder",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderStoredProcedureName": "[ETL].[GET_FOLDER_IN_DATA_LAKE]",
+									"storedProcedureParameters": {
+										"File_Last_Modified_Date": {
+											"type": "String",
+											"value": {
+												"value": "@substring(last(split(Item().Name,'-')),0, 8)",
+												"type": "Expression"
+											}
+										},
+										"File_Name": {
+											"type": "String",
+											"value": {
+												"value": "@last(split(Item().Name,'/'))",
+												"type": "Expression"
+											}
+										},
+										"Full_Name_Required": {
+											"type": "Int32",
+											"value": "1"
+										}
+									},
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "ds_sql_etl_generic",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "If has any mapping",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "GetTargetFolder",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@not(empty(activity('GetTargetFolder').output.firstRow.In_Folder))",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "MoveFile",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [
+											{
+												"name": "Source",
+												"value": "@{concat(pipeline().parameters.DL_FilesInTransit_TopFolder, '/', pipeline().parameters.DL_FilesInTransit_Path, '/', pipeline().parameters.StagingFolderName)}/@{Item().Name}"
+											},
+											{
+												"name": "Destination",
+												"value": "@{concat(pipeline().parameters.DL_FilesInTransit_TopFolder,'/', replace(activity('GetTargetFolder').output.firstRow.In_Folder, last(split(activity('GetTargetFolder').output.firstRow.In_Folder,'/')), ''))}/@{item().Name}"
+											}
+										],
+										"typeProperties": {
+											"source": {
+												"type": "AzureBlobFSSource",
+												"recursive": true
+											},
+											"sink": {
+												"type": "AzureBlobFSSink"
+											},
+											"enableStaging": false
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_dl_generic_src",
+												"type": "DatasetReference",
+												"parameters": {
+													"FileName": {
+														"value": "@Item().Name",
+														"type": "Expression"
+													},
+													"FolderName": {
+														"value": "@{pipeline().parameters.DL_FilesInTransit_TopFolder}/@{pipeline().parameters.DL_FilesInTransit_Path}/@{pipeline().parameters.StagingFolderName}",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ds_dl_generic_dest",
+												"type": "DatasetReference",
+												"parameters": {
+													"FileName": {
+														"value": "@item().Name",
+														"type": "Expression"
+													},
+													"FolderName": {
+														"value": "@concat(pipeline().parameters.DL_FilesInTransit_TopFolder,'/', replace(activity('GetTargetFolder').output.firstRow.In_Folder, last(split(activity('GetTargetFolder').output.firstRow.In_Folder,'/')), ''))",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"name": "WatermarkTheFile",
+										"type": "SqlServerStoredProcedure",
+										"dependsOn": [
+											{
+												"activity": "MoveFile",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"storedProcedureName": "[ETL].[INSERT_FILE_WATERMARK]",
+											"storedProcedureParameters": {
+												"File_Path": {
+													"value": {
+														"value": "@concat(pipeline().parameters.DL_FilesInTransit_TopFolder,'/', replace(activity('GetTargetFolder').output.firstRow.In_Folder, last(split(activity('GetTargetFolder').output.firstRow.In_Folder,'/')), ''))",
+														"type": "Expression"
+													},
+													"type": "String"
+												},
+												"Source_File_Name": {
+													"value": {
+														"value": "@item().Name",
+														"type": "Expression"
+													},
+													"type": "String"
+												},
+												"Source_System_Name": {
+													"value": {
+														"value": "@pipeline().parameters.SourceSystemName",
+														"type": "Expression"
+													},
+													"type": "String"
+												}
+											}
+										},
+										"linkedServiceName": {
+											"referenceName": "ls_sql_ETL",
+											"type": "LinkedServiceReference"
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"DL_FilesInTransit_Account": {
+				"type": "string",
+				"defaultValue": "owfgdbdvdl001sg001"
+			},
+			"DL_FilesInTransit_TopFolder": {
+				"type": "string",
+				"defaultValue": "owfg-dna-dl"
+			},
+			"DL_FilesInTransit_Path": {
+				"type": "string",
+				"defaultValue": "InTransit/ReceivingRepository"
+			},
+			"SourceSystemName": {
+				"type": "string",
+				"defaultValue": "QlikView"
+			},
+			"StagingFolderName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-11-03T21:03:05Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

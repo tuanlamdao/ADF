@@ -1,0 +1,174 @@
+{
+	"name": "ParquetZone1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSV",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "internal/LDW/PARQUET/POS_DAILY_STORE_ITEM_HH/2012",
+				"container": "retail-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "WEEK_ENDING_DATE",
+				"type": "UTF8"
+			},
+			{
+				"name": "FISCAL_DATE",
+				"type": "UTF8"
+			},
+			{
+				"name": "LOCATION_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "ITEM_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "OFFER_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "CX",
+				"type": "UTF8"
+			},
+			{
+				"name": "HHN",
+				"type": "UTF8"
+			},
+			{
+				"name": "TOTAL_SALES_QUANTITY",
+				"type": "UTF8"
+			},
+			{
+				"name": "TOTAL_SALES_WEIGHT",
+				"type": "UTF8"
+			},
+			{
+				"name": "TOTAL_SALES_DOLLARS",
+				"type": "UTF8"
+			},
+			{
+				"name": "EXTENDED_COST",
+				"type": "UTF8"
+			},
+			{
+				"name": "OWT_POINTS",
+				"type": "UTF8"
+			},
+			{
+				"name": "REDEMPTION_POINTS",
+				"type": "UTF8"
+			},
+			{
+				"name": "BATCH_NUM",
+				"type": "UTF8"
+			},
+			{
+				"name": "SEGID",
+				"type": "UTF8"
+			},
+			{
+				"name": "TRANSACTION_NUMBER",
+				"type": "UTF8"
+			},
+			{
+				"name": "SCAN_CODE",
+				"type": "UTF8"
+			},
+			{
+				"name": "TRANSACTION_DT",
+				"type": "UTF8"
+			},
+			{
+				"name": "REGISTER_LANE",
+				"type": "UTF8"
+			},
+			{
+				"name": "CASHIER_NUMBER",
+				"type": "UTF8"
+			},
+			{
+				"name": "POS_CODE",
+				"type": "UTF8"
+			},
+			{
+				"name": "COUPON_SCAN_CODE",
+				"type": "UTF8"
+			},
+			{
+				"name": "COUPON_COUNT",
+				"type": "UTF8"
+			},
+			{
+				"name": "LANDED_BRANCH_COST",
+				"type": "UTF8"
+			},
+			{
+				"name": "COST_UOM_CD",
+				"type": "UTF8"
+			},
+			{
+				"name": "REGULAR_RETAIL_QTY",
+				"type": "UTF8"
+			},
+			{
+				"name": "REGULAR_RETAIL_PRICE",
+				"type": "UTF8"
+			},
+			{
+				"name": "INCENTIVE_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "WAREHOUSE_ITEM_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "REDEMPTION_SALES_UNITS",
+				"type": "UTF8"
+			},
+			{
+				"name": "MFC_DISCOUNT_QTY",
+				"type": "UTF8"
+			},
+			{
+				"name": "MFC_DISCOUNT_AMT",
+				"type": "UTF8"
+			},
+			{
+				"name": "MFC_OFFER_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "OFG_OFFER_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "OFG_DISCOUNT_QTY",
+				"type": "UTF8"
+			},
+			{
+				"name": "OFG_DISCOUNT_AMT",
+				"type": "UTF8"
+			},
+			{
+				"name": "DGT_OFFER_POINTS",
+				"type": "UTF8"
+			},
+			{
+				"name": "MERCH_PROG_ID",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

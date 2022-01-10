@@ -1,0 +1,320 @@
+{
+	"name": "Triage_Received_Files",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set End DateTime",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "EndDateTime",
+					"value": {
+						"value": "@formatDateTime(utcnow(), 'yyyy-MM-ddTHH:mm:ss.fffZ')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Get Start Time",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "00:00:30",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[ETL].[GET_SOURCE_TO_PROCESS_START_DATE]",
+						"storedProcedureParameters": {
+							"Source_Name": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.SourceSystemName",
+									"type": "Expression"
+								}
+							}
+						},
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_etl_generic",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Set Start DateTime",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Start Time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "StartDateTime",
+					"value": {
+						"value": "@formatDateTime(activity('Get Start Time').output. firstRow.StartTime_UTC, 'yyyy-MM-ddTHH:mm:ss.fffZ')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "StageTheNewFiles",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Set Start DateTime",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set End DateTime",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set staging tmpFoldername",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureBlobFSSource",
+						"recursive": true
+					},
+					"sink": {
+						"type": "AzureBlobFSSink"
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_dl_generic_folder_gz",
+						"type": "DatasetReference",
+						"parameters": {
+							"FolderName": {
+								"value": "@concat(pipeline().parameters.DL_FilesInTransit_TopFolder, '/', pipeline().parameters.DL_FilesInTransit_Path)",
+								"type": "Expression"
+							},
+							"StartDateTime": {
+								"value": "@variables('StartDateTime')",
+								"type": "Expression"
+							},
+							"EndDateTime": {
+								"value": "@variables('EndDateTime')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_dl_generic_folder_gz",
+						"type": "DatasetReference",
+						"parameters": {
+							"FolderName": {
+								"value": "@concat(pipeline().parameters.DL_FilesInTransit_TopFolder, '/', pipeline().parameters.DL_FilesInTransit_Path, '/', variables('StagingFolderName'))",
+								"type": "Expression"
+							},
+							"StartDateTime": {
+								"value": "null",
+								"type": "Expression"
+							},
+							"EndDateTime": {
+								"value": "null",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "WriteToLog",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "StageTheNewFiles",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "00:00:30",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ETL].[INSERT_SOURCE_TIME_WINDOW_WATERMARK]",
+					"storedProcedureParameters": {
+						"Batch_End_Time": {
+							"value": {
+								"value": "@variables('EndDateTime')",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"Batch_Start_Time": {
+							"value": {
+								"value": "@variables('StartDateTime')",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"Copied_File_Count": {
+							"value": {
+								"value": "@activity('StageTheNewFiles').output. filesWritten",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"Time_Of_Last_Processed_File": {
+							"value": {
+								"value": "@utcnow()",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"Source_Name": {
+							"value": {
+								"value": "@pipeline().parameters.SourceSystemName",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_sql_ETL",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Set staging tmpFoldername",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "StagingFolderName",
+					"value": {
+						"value": "@guid()",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "If any file was available",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "WriteToLog",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(activity('StageTheNewFiles').output. filesWritten, 0)",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "OrchFilesToRaw",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Orch_Files_To_Raw",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"DL_FilesInTransit_Account": {
+										"value": "@pipeline().parameters.DL_FilesInTransit_Account",
+										"type": "Expression"
+									},
+									"DL_FilesInTransit_TopFolder": {
+										"value": "@pipeline().parameters.DL_FilesInTransit_TopFolder",
+										"type": "Expression"
+									},
+									"DL_FilesInTransit_Path": {
+										"value": "@pipeline().parameters.DL_FilesInTransit_Path",
+										"type": "Expression"
+									},
+									"SourceSystemName": {
+										"value": "@pipeline().parameters.SourceSystemName",
+										"type": "Expression"
+									},
+									"StagingFolderName": {
+										"value": "@variables('StagingFolderName')",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"DL_FilesInTransit_Account": {
+				"type": "string",
+				"defaultValue": "owfgdbdvdl001sg001"
+			},
+			"DL_FilesInTransit_TopFolder": {
+				"type": "string",
+				"defaultValue": "owfg-dna-dl"
+			},
+			"DL_FilesInTransit_Path": {
+				"type": "string",
+				"defaultValue": "InTransit/ReceivingRepository"
+			},
+			"SourceSystemName": {
+				"type": "string",
+				"defaultValue": "QlikView"
+			}
+		},
+		"variables": {
+			"EndDateTime": {
+				"type": "String"
+			},
+			"StartDateTime": {
+				"type": "String"
+			},
+			"StagingFolderName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-11-03T20:55:19Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

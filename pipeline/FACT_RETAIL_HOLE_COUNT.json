@@ -1,0 +1,305 @@
+{
+	"name": "FACT_RETAIL_HOLE_COUNT",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get_Metadata_RetailHoldeCount",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "CSVZone1",
+						"type": "DatasetReference",
+						"parameters": {
+							"SrcContainer": "retail-data",
+							"SrcDIR": "internal/LDW/CSV/Shrink/RETAIL_HOLE_COUNT/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED"
+						}
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get_Metadata_RetailHoldeCount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get_Metadata_RetailHoldeCount').output.childItems",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "RETAIL_HOLE_COUNT_Fact",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "RETAIL_HOLE_COUNT_Fact",
+									"type": "DataFlowReference",
+									"datasetParameters": {
+										"RetailHoleCountSRC": {
+											"SrcContainer": "retail-data",
+											"SrcDIR": "internal/LDW/CSV/Shrink/RETAIL_HOLE_COUNT/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+											"SrcFileName": {
+												"value": "@item().name",
+												"type": "Expression"
+											}
+										},
+										"sinkTGT": {
+											"TgtContainer": "retail-data",
+											"TgtDIR": "Internal/LDW/Parquet/Sales-FACT/RETAIL_HOLE_COUNT"
+										}
+									}
+								},
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								},
+								"traceLevel": "Coarse"
+							}
+						},
+						{
+							"name": "Copy_SrcFile",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "RETAIL_HOLE_COUNT_Fact",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": false,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "RetailHoleCountZone1",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "retail-data",
+										"SrcDIR": "internal/LDW/CSV/Shrink/RETAIL_HOLE_COUNT/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "RetailHoleCountZone1",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "retail-data",
+										"SrcDIR": "internal/LDW/CSV/Shrink/RETAIL_HOLE_COUNT/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "DeleteSrcFile",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "Copy_SrcFile",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "RetailHoleCountZone1",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "retail-data",
+										"SrcDIR": "internal/LDW/CSV/Shrink/RETAIL_HOLE_COUNT/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": false,
+									"enablePartitionDiscovery": false
+								}
+							}
+						},
+						{
+							"name": "Copy_SrcFiletoFailure",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "RETAIL_HOLE_COUNT_Fact",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": false,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "RetailHoleCountZone1",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "retail-data",
+										"SrcDIR": "internal/LDW/CSV/Shrink/RETAIL_HOLE_COUNT/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "RetailHoleCountZone1",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "retail-data",
+										"SrcDIR": "internal/LDW/CSV/Shrink/RETAIL_HOLE_COUNT/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/Failure",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-01-05T00:02:27Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

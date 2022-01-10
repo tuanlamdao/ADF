@@ -1,0 +1,199 @@
+{
+	"name": "PosDailyStoreItem_DataScience",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "raw.pos_daily_store_item_hh_TEMP4.parquet",
+				"folderPath": "DataScientist",
+				"container": "synapse"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "FISCAL_DATE",
+				"type": "DATE"
+			},
+			{
+				"name": "LOCATION_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "ITEM_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "OFFER_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "CX",
+				"type": "INT64"
+			},
+			{
+				"name": "HHN",
+				"type": "INT64"
+			},
+			{
+				"name": "TOTAL_SALES_QUANTITY",
+				"type": "DECIMAL",
+				"precision": 12,
+				"scale": 2
+			},
+			{
+				"name": "TOTAL_SALES_WEIGHT",
+				"type": "DECIMAL",
+				"precision": 12,
+				"scale": 2
+			},
+			{
+				"name": "TOTAL_SALES_DOLLARS",
+				"type": "DECIMAL",
+				"precision": 12,
+				"scale": 2
+			},
+			{
+				"name": "EXTENDED_COST",
+				"type": "DECIMAL",
+				"precision": 12,
+				"scale": 2
+			},
+			{
+				"name": "OWT_POINTS",
+				"type": "INT64"
+			},
+			{
+				"name": "REDEMPTION_POINTS",
+				"type": "INT64"
+			},
+			{
+				"name": "BATCH_NUM",
+				"type": "INT32"
+			},
+			{
+				"name": "SEGID",
+				"type": "INT32"
+			},
+			{
+				"name": "TRANSACTION_NUMBER",
+				"type": "INT32"
+			},
+			{
+				"name": "SCAN_CODE",
+				"type": "INT64"
+			},
+			{
+				"name": "TRANSACTION_DT",
+				"type": "DATE"
+			},
+			{
+				"name": "TRANSACTION_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "REGISTER_LANE",
+				"type": "INT32"
+			},
+			{
+				"name": "CASHIER_NUMBER",
+				"type": "INT32"
+			},
+			{
+				"name": "POS_CODE",
+				"type": "UTF8"
+			},
+			{
+				"name": "COUPON_SCAN_CODE",
+				"type": "INT64"
+			},
+			{
+				"name": "COUPON_COUNT",
+				"type": "INT64"
+			},
+			{
+				"name": "LANDED_BRANCH_COST",
+				"type": "DECIMAL",
+				"precision": 9,
+				"scale": 2
+			},
+			{
+				"name": "COST_UOM_CD",
+				"type": "UTF8"
+			},
+			{
+				"name": "REGULAR_RETAIL_QTY",
+				"type": "DECIMAL",
+				"precision": 10,
+				"scale": 0
+			},
+			{
+				"name": "REGULAR_RETAIL_PRICE",
+				"type": "DECIMAL",
+				"precision": 9,
+				"scale": 2
+			},
+			{
+				"name": "INCENTIVE_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "WAREHOUSE_ITEM_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "REDEMPTION_SALES_UNITS",
+				"type": "DECIMAL",
+				"precision": 12,
+				"scale": 2
+			},
+			{
+				"name": "MFC_DISCOUNT_QTY",
+				"type": "DECIMAL",
+				"precision": 12,
+				"scale": 2
+			},
+			{
+				"name": "MFC_DISCOUNT_AMT",
+				"type": "DECIMAL",
+				"precision": 12,
+				"scale": 2
+			},
+			{
+				"name": "MFC_OFFER_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "OFG_OFFER_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "OFG_DISCOUNT_QTY",
+				"type": "DECIMAL",
+				"precision": 12,
+				"scale": 2
+			},
+			{
+				"name": "OFG_DISCOUNT_AMT",
+				"type": "DECIMAL",
+				"precision": 12,
+				"scale": 2
+			},
+			{
+				"name": "DGT_OFFER_POINTS",
+				"type": "INT64"
+			},
+			{
+				"name": "MERCH_PROG_ID",
+				"type": "INT64"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

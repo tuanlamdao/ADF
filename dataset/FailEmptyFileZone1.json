@@ -1,0 +1,40 @@
+{
+	"name": "FailEmptyFileZone1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSV",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TgtFailContainer": {
+				"type": "String",
+				"defaultValue": "master-data"
+			},
+			"TgtFailDir": {
+				"type": "String",
+				"defaultValue": "internal/LDW/CSV/EmptyFileCheck/AdVehicle/Fail"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@dataset().TgtFailDir",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().TgtFailContainer",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

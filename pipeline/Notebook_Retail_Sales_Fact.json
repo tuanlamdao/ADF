@@ -1,0 +1,30 @@
+{
+	"name": "Notebook_Retail_Sales_Fact",
+	"properties": {
+		"activities": [
+			{
+				"name": "Notebook_Retail_Sales_Fact",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/rahul_vig@saveonfoods.com/Retail_Sales_Fact"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-03-26T17:10:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

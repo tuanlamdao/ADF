@@ -1,0 +1,28 @@
+{
+	"name": "OFFER_INCENTIVE_FinalSCD6",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "OfferIncetivesReadMulitpleTempParquetFiles",
+						"type": "DatasetReference"
+					},
+					"name": "OfferIncentiveMultipleParquetFiles"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "OfferIncentivesTGT",
+						"type": "DatasetReference"
+					},
+					"name": "sinkOfferIncentivesFinal"
+				}
+			],
+			"transformations": [],
+			"script": "source(output(\n\t\tIncentive_Surrogate_ID as long,\n\t\tID as integer,\n\t\tINCENTIVE as string,\n\t\tCurrent_INCENTIVE as string,\n\t\tINCENTIVE_PRICE_TYPE as string,\n\t\tCurrent_INCENTIVE_PRICE_TYPE as string,\n\t\tREDEMPTION_TYPE as string,\n\t\tCurrent_REDEMPTION_TYPE as string,\n\t\tLAST_CHANGED as string,\n\t\tLAST_DML as integer,\n\t\tEFF_START_DT as date,\n\t\tEFF_END_DT as date,\n\t\tIsActive as integer,\n\t\tCRC_VAL as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet',\n\twildcardPaths:['Internal/LDW/Parquet/Offer&Promotion-DIM/OFFER_INCENTIVE/Temp/*.parquet']) ~> OfferIncentiveMultipleParquetFiles\nOfferIncentiveMultipleParquetFiles sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tIncentive_Surrogate_Id as long,\n\t\tID as integer,\n\t\tIncentive as string,\n\t\tCurrent_Incentive as string,\n\t\tIncentive_Price_Type as string,\n\t\tCurrent_Incentive_Price_Type as string,\n\t\tRedemption_Type as string,\n\t\tCurrent_Redemption_Type as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['DIM_OFFER_INCENTIVE.parquet'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tmapColumn(\n\t\tIncentive_Surrogate_Id = Incentive_Surrogate_ID,\n\t\tID,\n\t\tIncentive = INCENTIVE,\n\t\tCurrent_Incentive = Current_INCENTIVE,\n\t\tIncentive_Price_Type = INCENTIVE_PRICE_TYPE,\n\t\tCurrent_Incentive_Price_Type = Current_INCENTIVE_PRICE_TYPE,\n\t\tRedemption_Type = REDEMPTION_TYPE,\n\t\tCurrent_Redemption_Type = Current_REDEMPTION_TYPE,\n\t\tLast_Changed = LAST_CHANGED,\n\t\tLast_Dml = LAST_DML,\n\t\tEff_Start_Dt = EFF_START_DT,\n\t\tEff_End_Dt = EFF_END_DT,\n\t\tIsActive,\n\t\tCrc_Val = CRC_VAL\n\t),\n\tpartitionBy('hash', 1)) ~> sinkOfferIncentivesFinal"
+		}
+	}
+}

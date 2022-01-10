@@ -1,0 +1,199 @@
+{
+	"name": "AdVehicleZone3TGT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageParquetZone3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "DIM_AD_VEHICLE.parquet",
+				"folderPath": "Internal/LDW/Parquet/Offer&Promotion-DIM/AD_VEHICLE",
+				"container": "retail-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "Ad_Vehicle_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Publication_Entity_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Publication_Entity_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Section_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Section_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Page_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Page_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "Total_Pages",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Total_Pages",
+				"type": "INT32"
+			},
+			{
+				"name": "Section_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Section_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "Spot_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Spot_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "Spot_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Spot_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Page",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Page",
+				"type": "UTF8"
+			},
+			{
+				"name": "Section",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Section",
+				"type": "UTF8"
+			},
+			{
+				"name": "Spot",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Spot",
+				"type": "UTF8"
+			},
+			{
+				"name": "Spot_Position",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Spot_Position",
+				"type": "UTF8"
+			},
+			{
+				"name": "Vehicle_Offer_Duration",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Vehicle_Offer_Duration",
+				"type": "UTF8"
+			},
+			{
+				"name": "Section_Full_Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Section_Full_Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Spot_Full_Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Spot_Full_Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Spot_Position_Full_Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Spot_Position_Full_Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Publication_Version",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_Publication_Version",
+				"type": "INT32"
+			},
+			{
+				"name": "Main_Ad_Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Main_Ad_Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Ad_Varieties",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Ad_Varieties",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Changed",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Dml",
+				"type": "INT32"
+			},
+			{
+				"name": "Eff_Start_Dt",
+				"type": "DATE"
+			},
+			{
+				"name": "Eff_End_Dt",
+				"type": "DATE"
+			},
+			{
+				"name": "IsActive",
+				"type": "INT32"
+			},
+			{
+				"name": "Crc_Val",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,21 @@
+{
+	"name": "EcommSrc",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSVZone1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "internal/STAR/PARQUET/Rad_Sys_User",
+				"container": "people-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

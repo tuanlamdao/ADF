@@ -1,0 +1,141 @@
+{
+	"name": "DateTimeZone1SRC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSV",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"DATEContainer": {
+				"type": "String",
+				"defaultValue": "master-data"
+			},
+			"DATEDir": {
+				"type": "String",
+				"defaultValue": "internal/LDW/CSV/Time/DIM_TIME/2020/11/UNPROCESSED"
+			},
+			"SrcFile": {
+				"type": "String",
+				"defaultValue": "DIM_TIME_20201022_152308.csv"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().SrcFile",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().DATEDir",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().DATEContainer",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "CALENDAR_DATE",
+				"type": "String"
+			},
+			{
+				"name": "WEEK_END_DATE",
+				"type": "String"
+			},
+			{
+				"name": "PERIOD_END_DATE",
+				"type": "String"
+			},
+			{
+				"name": "QUARTER_END_DATE",
+				"type": "String"
+			},
+			{
+				"name": "PERIOD",
+				"type": "String"
+			},
+			{
+				"name": "WEEK",
+				"type": "String"
+			},
+			{
+				"name": "QUARTER",
+				"type": "String"
+			},
+			{
+				"name": "YEAR",
+				"type": "String"
+			},
+			{
+				"name": "YR_WK",
+				"type": "String"
+			},
+			{
+				"name": "YR_PD",
+				"type": "String"
+			},
+			{
+				"name": "YR_QTR",
+				"type": "String"
+			},
+			{
+				"name": "MONTH_DAY",
+				"type": "String"
+			},
+			{
+				"name": "FLYER_YEAR_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "FLYER_WEEK_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "FLYER_WEEK_ENDING_DATE",
+				"type": "String"
+			},
+			{
+				"name": "FLYER_YR_WK",
+				"type": "String"
+			},
+			{
+				"name": "CALENDAR_YEAR",
+				"type": "String"
+			},
+			{
+				"name": "CALENDAR_MONTH",
+				"type": "String"
+			},
+			{
+				"name": "FISCAL_DAY_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "DAY_OF_WEEK",
+				"type": "String"
+			},
+			{
+				"name": "DAY_OF_WEEK_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "WEEK_SORT",
+				"type": "String"
+			},
+			{
+				"name": "LEAP_YEAR",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

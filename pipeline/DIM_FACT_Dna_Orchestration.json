@@ -1,0 +1,419 @@
+{
+	"name": "DIM_FACT_Dna_Orchestration",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIMAdVehicle_SCD6",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIMAdVehicle_SCD6",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIMCashier_SCD6",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIMCashier_SCD6",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIMEcommOffer_SCD6",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIMAdVehicle_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIMEcommOffer_SCD6",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIMOffer_Incentives_SCD6",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIMOffer_Incentives_SCD6",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIMOffer_SCD6",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIMOffer_Incentives_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIMOffer_SCD6",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIMRegister_SCD6",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIMRegister_SCD6",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIMSaleType_SCD6",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIMSaleType_SCD6",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIMSeasonality_SCD6",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIMITEM_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIMSeasonality_SCD6",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Notebook_Retail_Sales_Fact",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIMEcommOffer_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DIMRegister_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DIMSaleType_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DIMOffer_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "CUSTOMER_DIM_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DIMITEM_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DIMLocation_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Notebook_Retail_Sales_Fact",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "SendEmail_Success",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Notebook_Retail_Sales_Fact",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.westus2.logic.azure.com:443/workflows/542264d990fa43479508293a09c89e2e/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=JkFYxCGkt7_UwCie5qnk9GmRcPvzzQO1o3ov4Eq5mWg",
+					"method": "POST",
+					"body": {
+						"value": "{\n\"title\":\"Pipeline Run Finished\",\n\"message\":\"DIM FACT Orchest Pipiline Finished Successfully\",\n\"color\":\"Green\",\n\"dataFactoryName\":\"@{pipeline().DataFactory}\",\n\"pipelineName\":\"@{pipeline().Pipeline}\",\n\"pipelineRunId\":\"@{pipeline().RunId}\",\n\"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "RetailSalesEmail_Failure",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Notebook_Retail_Sales_Fact",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.westus2.logic.azure.com:443/workflows/542264d990fa43479508293a09c89e2e/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=JkFYxCGkt7_UwCie5qnk9GmRcPvzzQO1o3ov4Eq5mWg",
+					"method": "POST",
+					"body": {
+						"value": "{\n\"title\":\"Pipeline Run Failed\",\n\"message\":\"@{activity('Notebook_Retail_Sales_Fact').error.message}\",\n\"color\":\"Red\",\n\"dataFactoryName\":\"@{pipeline().DataFactory}\",\n\"pipelineName\":\"@{pipeline().Pipeline}\",\n\"pipelineRunId\":\"@{pipeline().RunId}\",\n\"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "CUSTOMER_DIM_SCD6",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIMCashier_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Notebook_CUSTOMER_DIM",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIMITEM_SCD6",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Notebook_ITEM_DIM",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIMLocation_SCD6",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Notebook_LocationDIM",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "KnownShrink_Fact",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIMLocation_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DIMITEM_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Notebook_Known_Shrink",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "RetailHoleCount_Fact",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIMLocation_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DIMITEM_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Notebook_Retail_Hole_Count",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Move_Delete_SourceFiles",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Notebook_Retail_Sales_Fact",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/rahul_vig@saveonfoods.com/Move_Source_Files"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Household_DIM",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "CUSTOMER_DIM_SCD6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/rahul_vig@saveonfoods.com/Dim_HouseHold_DailyLoad"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Annualized_Household_Churn_Fact",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Notebook_Retail_Sales_Fact",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Annualized_Household_Churn_Fact",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-11-03T21:14:34Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

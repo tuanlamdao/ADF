@@ -1,0 +1,45 @@
+{
+	"name": "DIMDate_SCD",
+	"properties": {
+		"activities": [
+			{
+				"name": "DATE_FinalSCD",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DATE_FinalSCD",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"SrcDateDIM": {
+								"DATEContainer": "master-data",
+								"DATEDir": "internal/LDW/CSV/Time/DIM_DATE/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+								"SrcFile": "DIM_DATE_20201022_152308.csv"
+							},
+							"sinkDATE": {
+								"TGTDir": "internal/LDW/Parquet/Time-DIM/DIM_DATE",
+								"TGTContainer": "master-data"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-11-21T23:33:54Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

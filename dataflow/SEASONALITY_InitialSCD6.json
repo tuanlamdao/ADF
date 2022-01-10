@@ -1,0 +1,70 @@
+{
+	"name": "SEASONALITY_InitialSCD6",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SeasonalityZone1SRC",
+						"type": "DatasetReference"
+					},
+					"name": "SEASONALITYParquetSCD"
+				},
+				{
+					"dataset": {
+						"referenceName": "SEASONALITYZone3TGT",
+						"type": "DatasetReference"
+					},
+					"name": "SEASONALITYDIM"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SeasonalityTempZone3",
+						"type": "DatasetReference"
+					},
+					"name": "sinkNew"
+				},
+				{
+					"dataset": {
+						"referenceName": "SeasonalityTempZone3",
+						"type": "DatasetReference"
+					},
+					"name": "sinkNoChange"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectTGT"
+				},
+				{
+					"name": "DerivedColumnCRCVAL"
+				},
+				{
+					"name": "AGGMAXVAL"
+				},
+				{
+					"name": "JoinSRCMaxTGTKey"
+				},
+				{
+					"name": "FindNewUpdateDeleteRecords"
+				},
+				{
+					"name": "CreateSurrogateKey"
+				},
+				{
+					"name": "DerivedColumnSurrogateKey"
+				},
+				{
+					"name": "JoinSrcTgt"
+				},
+				{
+					"name": "SortSrcID"
+				}
+			],
+			"script": "source(output(\n\t\tITEM_ID as long,\n\t\tSEASONALITY as string,\n\t\tLAST_CHANGED as string,\n\t\tLAST_DML as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> SEASONALITYParquetSCD\nsource(output(\n\t\tSeasonality_Surrogate_Id as long,\n\t\tItem_Id as long,\n\t\tSeasonality as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> SEASONALITYDIM\nSEASONALITYDIM select(mapColumn(\n\t\tTGT_Seasonality_Surrogate_Id = Seasonality_Surrogate_Id,\n\t\tTGT_Item_Id = Item_Id,\n\t\tTGT_Seasonality = Seasonality,\n\t\tTGT_Last_Changed = Last_Changed,\n\t\tTGT_Last_Dml = Last_Dml,\n\t\tTGT_Eff_Start_Dt = Eff_Start_Dt,\n\t\tTGT_Eff_End_Dt = Eff_End_Dt,\n\t\tTGT_IsActive = IsActive,\n\t\tTGT_Crc_Val = Crc_Val\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectTGT\nSortSrcID derive(IsActive = 1,\n\t\tEFF_START_DT = toDate('1900-01-01'),\n\t\tEFF_END_DT = toDate('9999-12-31'),\n\t\tCRCVAL = md5(ITEM_ID,SEASONALITY)) ~> DerivedColumnCRCVAL\nSelectTGT aggregate(MAXVAL = max(TGT_Seasonality_Surrogate_Id)) ~> AGGMAXVAL\nSEASONALITYParquetSCD, AGGMAXVAL join(1 == 1,\n\tjoinType:'cross',\n\tbroadcast: 'auto')~> JoinSRCMaxTGTKey\nDerivedColumnCRCVAL split(isNull(TGT_Seasonality_Surrogate_Id),\n\tnot(isNull(TGT_Seasonality_Surrogate_Id)),\n\tdisjoint: false,\n\tpartitionBy('hash', 1)) ~> FindNewUpdateDeleteRecords@(SurrogateKey, NoSurrogateKey)\nFindNewUpdateDeleteRecords@SurrogateKey keyGenerate(output(SurrogateKey as long),\n\tstartAt: 1L) ~> CreateSurrogateKey\nCreateSurrogateKey derive(out_SurrogateKey = toInteger(SurrogateKey) + iifNull(MAXVAL,0,MAXVAL),\n\t\tout_Eff_Start_DT = case(LAST_DML<0,currentDate(),EFF_START_DT),\n\t\tout_Active = case(LAST_DML<0,0,1)) ~> DerivedColumnSurrogateKey\nJoinSRCMaxTGTKey, SelectTGT join(ITEM_ID == TGT_Item_Id\n\t&& SEASONALITY == TGT_Seasonality,\n\tjoinType:'outer',\n\tbroadcast: 'auto')~> JoinSrcTgt\nJoinSrcTgt sort(asc(ITEM_ID, false)) ~> SortSrcID\nDerivedColumnSurrogateKey sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tinput(\n\t\tSeasonality_Surrogate_Id as long,\n\t\tItem_Id as long,\n\t\tSeasonality as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['SEASONALITYDIM_New.parquet'],\n\tsaveOrder: 0,\n\tmapColumn(\n\t\tSeasonality_Surrogate_Id = out_SurrogateKey,\n\t\tItem_Id = ITEM_ID,\n\t\tSeasonality = SEASONALITY,\n\t\tLast_Changed = LAST_CHANGED,\n\t\tLast_Dml = LAST_DML,\n\t\tEff_Start_Dt = out_Eff_Start_DT,\n\t\tEff_End_Dt = EFF_END_DT,\n\t\tIsActive = out_Active,\n\t\tCrc_Val = CRCVAL\n\t),\n\tpartitionBy('hash', 1)) ~> sinkNew\nFindNewUpdateDeleteRecords@NoSurrogateKey sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tinput(\n\t\tSeasonality_Surrogate_Id as long,\n\t\tItem_Id as long,\n\t\tSeasonality as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['SEASONALITYDIMNoChange.parquet'],\n\tsaveOrder: 0,\n\tmapColumn(\n\t\tSeasonality_Surrogate_Id = TGT_Seasonality_Surrogate_Id,\n\t\tItem_Id = TGT_Item_Id,\n\t\tSeasonality = TGT_Seasonality,\n\t\tLast_Changed = TGT_Last_Changed,\n\t\tLast_Dml = TGT_Last_Dml,\n\t\tEff_Start_Dt = TGT_Eff_Start_Dt,\n\t\tEff_End_Dt = TGT_Eff_End_Dt,\n\t\tIsActive = TGT_IsActive,\n\t\tCrc_Val = TGT_Crc_Val\n\t),\n\tpartitionBy('hash', 1)) ~> sinkNoChange"
+		}
+	}
+}

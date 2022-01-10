@@ -1,0 +1,429 @@
+{
+	"name": "ItemZone1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSV",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SrcContainer": {
+				"type": "String",
+				"defaultValue": "master-data"
+			},
+			"SrcDIR": {
+				"type": "String",
+				"defaultValue": "internal/LDW/CSV/Product/ITEM/2020/12/UNPROCESSED"
+			},
+			"SrcFileName": {
+				"type": "String",
+				"defaultValue": "ITEM_20201126_052545.csv"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().SrcFileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().SrcDIR",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().SrcContainer",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "LEGACY_ITEM_CODE",
+				"type": "String"
+			},
+			{
+				"name": "VARIANT_ID",
+				"type": "String"
+			},
+			{
+				"name": "VARIANT_NAME",
+				"type": "String"
+			},
+			{
+				"name": "VARIANT",
+				"type": "String"
+			},
+			{
+				"name": "CHINESE_VARIANT",
+				"type": "String"
+			},
+			{
+				"name": "CHINESE_VARIANT_NAME",
+				"type": "String"
+			},
+			{
+				"name": "LEAD_VARIANT_INDICATOR",
+				"type": "String"
+			},
+			{
+				"name": "LEAD_RETAIL_VARIANT",
+				"type": "String"
+			},
+			{
+				"name": "RETAIL_SIZE",
+				"type": "String"
+			},
+			{
+				"name": "RETAIL_WEIGHT",
+				"type": "String"
+			},
+			{
+				"name": "RETAIL_PACK",
+				"type": "String"
+			},
+			{
+				"name": "PRODUCT_STATUS",
+				"type": "String"
+			},
+			{
+				"name": "OPTION_CODE",
+				"type": "String"
+			},
+			{
+				"name": "TAX_CODE",
+				"type": "String"
+			},
+			{
+				"name": "FINANCIAL_SALE_FLAG",
+				"type": "String"
+			},
+			{
+				"name": "MERCH_SALES_FLAG",
+				"type": "String"
+			},
+			{
+				"name": "STIT",
+				"type": "String"
+			},
+			{
+				"name": "DPACK",
+				"type": "String"
+			},
+			{
+				"name": "BASKET_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "STRATEGIC_GROUP",
+				"type": "String"
+			},
+			{
+				"name": "SELL_UNITS",
+				"type": "String"
+			},
+			{
+				"name": "AMP_FORECAST_ITEM",
+				"type": "String"
+			},
+			{
+				"name": "REPACK_FLAG",
+				"type": "String"
+			},
+			{
+				"name": "LAST_WEEK_AD_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "STORE_REPORT",
+				"type": "String"
+			},
+			{
+				"name": "DEPARTMENT_ID",
+				"type": "String"
+			},
+			{
+				"name": "DEPARTMENT_NAME",
+				"type": "String"
+			},
+			{
+				"name": "MERCH_DEPARTMENT_ID",
+				"type": "String"
+			},
+			{
+				"name": "MERCH_DEPARTMENT",
+				"type": "String"
+			},
+			{
+				"name": "GL_DEPARTMENT_ID",
+				"type": "String"
+			},
+			{
+				"name": "GL_DEPARTMENT_NAME",
+				"type": "String"
+			},
+			{
+				"name": "CONS_GL_DEPARTMENT_ID",
+				"type": "String"
+			},
+			{
+				"name": "CONS_GL_DEPARTMENT",
+				"type": "String"
+			},
+			{
+				"name": "CONS_GL_DEPARTMENT_NAME",
+				"type": "String"
+			},
+			{
+				"name": "CONS_DEPARTMENT",
+				"type": "String"
+			},
+			{
+				"name": "HIGH_LEVEL_DEPARTMENT",
+				"type": "String"
+			},
+			{
+				"name": "CLASS_CAT_ID",
+				"type": "String"
+			},
+			{
+				"name": "CLASS_CAT",
+				"type": "String"
+			},
+			{
+				"name": "CATEGORY_ID",
+				"type": "String"
+			},
+			{
+				"name": "CATEGORY",
+				"type": "String"
+			},
+			{
+				"name": "NEW_CLASS",
+				"type": "String"
+			},
+			{
+				"name": "NEW_CLASS_CATEGORY",
+				"type": "String"
+			},
+			{
+				"name": "NEW_CLASS_SUBCATEGORY",
+				"type": "String"
+			},
+			{
+				"name": "FAMILY_CODE",
+				"type": "String"
+			},
+			{
+				"name": "FAMILY_NAME",
+				"type": "String"
+			},
+			{
+				"name": "FAMILY_ID",
+				"type": "String"
+			},
+			{
+				"name": "FAMILY",
+				"type": "String"
+			},
+			{
+				"name": "VENDOR_ID",
+				"type": "String"
+			},
+			{
+				"name": "BRAND_NAME",
+				"type": "String"
+			},
+			{
+				"name": "AP_VENDOR_ID",
+				"type": "String"
+			},
+			{
+				"name": "AP_VENDOR_NAME",
+				"type": "String"
+			},
+			{
+				"name": "AP_VENDOR",
+				"type": "String"
+			},
+			{
+				"name": "AP_VENDOR_ADDRESS_LINE_1",
+				"type": "String"
+			},
+			{
+				"name": "AP_VENDOR_ADDRESS_LINE_2",
+				"type": "String"
+			},
+			{
+				"name": "AP_VENDOR_CITY",
+				"type": "String"
+			},
+			{
+				"name": "AP_VENDOR_PROVINCE",
+				"type": "String"
+			},
+			{
+				"name": "CORP_BRAND_DESCRIPTION",
+				"type": "String"
+			},
+			{
+				"name": "CORP_BRAND_SHORT_DESCRIPTION",
+				"type": "String"
+			},
+			{
+				"name": "CORP_BRAND_INDICATOR",
+				"type": "String"
+			},
+			{
+				"name": "CORP_BRAND_VARIANT_CODE",
+				"type": "String"
+			},
+			{
+				"name": "CORP_BRAND_SHIELD",
+				"type": "String"
+			},
+			{
+				"name": "CORP_BRAND_VARIANT",
+				"type": "String"
+			},
+			{
+				"name": "CORP_BRAND_VARIANT_NAME",
+				"type": "String"
+			},
+			{
+				"name": "DAYMON",
+				"type": "String"
+			},
+			{
+				"name": "MERCHANDISER_NAME",
+				"type": "String"
+			},
+			{
+				"name": "MERCHANDISER_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "MERCHANDISER",
+				"type": "String"
+			},
+			{
+				"name": "SCPM",
+				"type": "String"
+			},
+			{
+				"name": "GENERAL_MANAGER",
+				"type": "String"
+			},
+			{
+				"name": "VICE_PRESIDENT",
+				"type": "String"
+			},
+			{
+				"name": "CB_DIRECTOR",
+				"type": "String"
+			},
+			{
+				"name": "BUSINESS_DEVELOPMENT_MANAGER",
+				"type": "String"
+			},
+			{
+				"name": "LISTING_DATE",
+				"type": "String"
+			},
+			{
+				"name": "LISTING_WEEK",
+				"type": "String"
+			},
+			{
+				"name": "LISTING_PERIOD",
+				"type": "String"
+			},
+			{
+				"name": "LISTING_YEAR",
+				"type": "String"
+			},
+			{
+				"name": "DISCONTINUE_DATE",
+				"type": "String"
+			},
+			{
+				"name": "DISCONTINUE_WEEK",
+				"type": "String"
+			},
+			{
+				"name": "DISCONTINUE_PERIOD",
+				"type": "String"
+			},
+			{
+				"name": "DISCONTINUE_YEAR",
+				"type": "String"
+			},
+			{
+				"name": "DISCONTINUE_REASON",
+				"type": "String"
+			},
+			{
+				"name": "FAMILY_START_DATE",
+				"type": "String"
+			},
+			{
+				"name": "FAMILY_END_DATE",
+				"type": "String"
+			},
+			{
+				"name": "FAMILY_START_WEEK",
+				"type": "String"
+			},
+			{
+				"name": "FAMILY_START_PERIOD",
+				"type": "String"
+			},
+			{
+				"name": "FAMILY_START_YEAR",
+				"type": "String"
+			},
+			{
+				"name": "FAMILY_END_WEEK",
+				"type": "String"
+			},
+			{
+				"name": "FAMILY_END_PERIOD",
+				"type": "String"
+			},
+			{
+				"name": "FAMILY_END_YEAR",
+				"type": "String"
+			},
+			{
+				"name": "SA_DEPT_ID",
+				"type": "String"
+			},
+			{
+				"name": "SA_MERCHANDISER_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "SOURCE_SYSTEM_CODE",
+				"type": "String"
+			},
+			{
+				"name": "LAST_CHANGED",
+				"type": "String"
+			},
+			{
+				"name": "LAST_DML",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

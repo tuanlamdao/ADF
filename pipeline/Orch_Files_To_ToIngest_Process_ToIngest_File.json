@@ -1,0 +1,469 @@
+{
+	"name": "Orch_Files_To_ToIngest_Process_ToIngest_File",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy File To ToIngest",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Set TargetFileName",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureBlobFSSource",
+						"recursive": true
+					},
+					"sink": {
+						"type": "AzureBlobFSSink"
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_dl_generic_src",
+						"type": "DatasetReference",
+						"parameters": {
+							"FileName": {
+								"value": "@pipeline().parameters.RowItem.Source_File_Name",
+								"type": "Expression"
+							},
+							"FolderName": {
+								"value": "@pipeline().parameters.RowItem.File_Path",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_dl_generic_dest",
+						"type": "DatasetReference",
+						"parameters": {
+							"FileName": {
+								"value": "@variables('TargetFileName')",
+								"type": "Expression"
+							},
+							"FolderName": {
+								"value": "@concat(pipeline().parameters.DL_TopFolder, '/', pipeline().parameters.IICS_Ingestion_Path, '/', pipeline().parameters.RowItem.File_Name_Prefix)",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Set File Status to 21-PROCESSING",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ETL].[WATERMARK_STATUS_SETTER]",
+					"storedProcedureParameters": {
+						"Status": {
+							"value": "21-PROCESSING",
+							"type": "String"
+						},
+						"Watermark_Id": {
+							"value": {
+								"value": "@pipeline().parameters.RowItem.Files_Watermark_Id",
+								"type": "Expression"
+							},
+							"type": "Int64"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_sql_ETL",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Set File Status to 22-TO_INGEST",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy File To ToIngest",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Delete Rows From Target Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ETL].[WATERMARK_STATUS_SETTER]",
+					"storedProcedureParameters": {
+						"Status": {
+							"value": "22-TO_INGEST",
+							"type": "String"
+						},
+						"Watermark_Id": {
+							"value": {
+								"value": "@pipeline().parameters.RowItem.Files_Watermark_Id",
+								"type": "Expression"
+							},
+							"type": "Int64"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_sql_ETL",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Prepare Delete Query",
+				"type": "Switch",
+				"dependsOn": [
+					{
+						"activity": "Set TargetFileName",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"on": {
+						"value": "@pipeline().parameters.RowItem.Version_Type",
+						"type": "Expression"
+					},
+					"cases": [
+						{
+							"value": "R",
+							"activities": [
+								{
+									"name": "Set QueryToRun_R",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "QueryToRun",
+										"value": {
+											"value": "TRUNCATE TABLE @{pipeline().parameters.RowItem.Target_Table};",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"value": "Q",
+							"activities": [
+								{
+									"name": "Set Fiscal_Quarter_Q",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Fiscal_Quarter",
+										"value": {
+											"value": "@replace(last(split(variables('FileName'), '_')), 'Q', '')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set Fiscal_Year_Q",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set Fiscal_Quarter_Q",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Fiscal_Year",
+										"value": {
+											"value": "@substring(last(split(replace(variables('FileName'), concat('_', 'Q', variables('Fiscal_Quarter')), ''), '_')), 1, 4)",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set QueryToRun_Q",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set Fiscal_Year_Q",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "QueryToRun",
+										"value": {
+											"value": "DECLARE @Cntue bit = 1; WHILE (@Cntue = 1) BEGIN WITH ValidDateRange AS (SELECT [Transaction_Date] FROM [QV].[DW_LOOKUP_TIME] t WHERE t.[Fiscal_Year]=@{variables('Fiscal_Year')} AND t.[Fiscal_Quarter]=@{variables('Fiscal_Quarter')}) DELETE top(100000) h FROM @{pipeline().parameters.RowItem.Target_Table} h WHERE [Transaction_Date] IN (SELECT [Transaction_Date] FROM ValidDateRange); IF (@@ROWCOUNT = 0 ) SET @Cntue = 0; END",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"value": "Y",
+							"activities": [
+								{
+									"name": "Set Fiscal_Year_Y",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Fiscal_Year",
+										"value": {
+											"value": "@replace(last(split(variables('FileName'), '_')), 'Y', '')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set QueryToRun_Y",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set Fiscal_Year_Y",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "QueryToRun",
+										"value": {
+											"value": "DECLARE @Cntue bit = 1; WHILE (@Cntue = 1) BEGIN WITH ValidDateRange AS (SELECT [Transaction_Date] FROM [QV].[DW_LOOKUP_TIME] t WHERE t.[Fiscal_Year]=@{variables('Fiscal_Year')}) DELETE top(100000) h FROM @{pipeline().parameters.RowItem.Target_Table} h WHERE [Transaction_Date] IN (SELECT [Transaction_Date] FROM ValidDateRange); IF (@@ROWCOUNT = 0 ) SET @Cntue = 0; END",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					],
+					"defaultActivities": [
+						{
+							"name": "Set QueryToRun_Default",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "QueryToRun",
+								"value": {
+									"value": "SELECT TOP 10 * FROM @{pipeline().parameters.RowItem.Target_Table};",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Set FileExtension Var",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set File Status to 21-PROCESSING",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FileExtension",
+					"value": {
+						"value": "@last(split(pipeline().parameters.RowItem.Source_File_Name, '.'))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set FileName Var",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set File Status to 21-PROCESSING",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FileName",
+					"value": {
+						"value": "@replace(pipeline().parameters.RowItem.Source_File_Name, concat('-', last(split(pipeline().parameters.RowItem.Source_File_Name, '-'))), '')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set FileDate Var",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set File Status to 21-PROCESSING",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FileDate",
+					"value": {
+						"value": "@first(split(last(split(pipeline().parameters.RowItem.Source_File_Name, '-')), '.'))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set TargetFileName",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set FileName Var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set FileDate Var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set FileExtension Var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "TargetFileName",
+					"value": {
+						"value": "@concat(variables('FileName'), '.', variables('FileExtension'))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Delete Rows From Target Table",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Prepare Delete Query",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 10,
+					"retryIntervalInSeconds": 120,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "sp_executesql",
+					"storedProcedureParameters": {
+						"stmt": {
+							"value": {
+								"value": "@variables('QueryToRun')",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_sql_db001",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"RowItem": {
+				"type": "object"
+			},
+			"DL_TopFolder": {
+				"type": "string"
+			},
+			"IICS_Ingestion_Path": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"QueryToRun": {
+				"type": "String"
+			},
+			"FileExtension": {
+				"type": "String"
+			},
+			"FileName": {
+				"type": "String"
+			},
+			"FileDate": {
+				"type": "String"
+			},
+			"TargetFileName": {
+				"type": "String"
+			},
+			"Fiscal_Year": {
+				"type": "String"
+			},
+			"Fiscal_Quarter": {
+				"type": "String"
+			},
+			"Fiscal_period": {
+				"type": "String"
+			},
+			"Fiscal_Week": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-01-24T02:17:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

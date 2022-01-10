@@ -1,0 +1,35 @@
+{
+	"name": "EcommStarData_845AM",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Run_Ecomm_Star_Data_Weekly",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Week",
+				"interval": 1,
+				"startTime": "2021-08-22T08:45:00",
+				"timeZone": "Pacific Standard Time",
+				"schedule": {
+					"minutes": [
+						45
+					],
+					"hours": [
+						8
+					],
+					"weekDays": [
+						"Sunday"
+					]
+				}
+			}
+		}
+	}
+}

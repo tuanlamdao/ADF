@@ -1,0 +1,393 @@
+{
+	"name": "CSVZone3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Zone3CSV",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "LocationDIM_New.txt",
+				"container": "synapse"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Location Surrogate ID",
+				"type": "String"
+			},
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "STORE_NAME",
+				"type": "String"
+			},
+			{
+				"name": "Current_STORE_NAME",
+				"type": "String"
+			},
+			{
+				"name": "STORE_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "Current_STORE_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "STORE",
+				"type": "String"
+			},
+			{
+				"name": "Current_STORE",
+				"type": "String"
+			},
+			{
+				"name": "STORE_ADDRESS",
+				"type": "String"
+			},
+			{
+				"name": "Current_STORE_ADDRESS",
+				"type": "String"
+			},
+			{
+				"name": "CITY",
+				"type": "String"
+			},
+			{
+				"name": "Current_CITY",
+				"type": "String"
+			},
+			{
+				"name": "PROVINCE",
+				"type": "String"
+			},
+			{
+				"name": "Current_PROVINCE",
+				"type": "String"
+			},
+			{
+				"name": "POSTAL_CODE",
+				"type": "String"
+			},
+			{
+				"name": "Current_POSTAL_CODE",
+				"type": "String"
+			},
+			{
+				"name": "LATITUDE",
+				"type": "String"
+			},
+			{
+				"name": "Current_LATITUDE",
+				"type": "String"
+			},
+			{
+				"name": "LONGITUDE",
+				"type": "String"
+			},
+			{
+				"name": "Current_LONGITUDE",
+				"type": "String"
+			},
+			{
+				"name": "SQUARE_FOOTAGE",
+				"type": "String"
+			},
+			{
+				"name": "Current_SQUARE_FOOTAGE",
+				"type": "String"
+			},
+			{
+				"name": "OPENING_DATE",
+				"type": "String"
+			},
+			{
+				"name": "Current_OPENING_DATE",
+				"type": "String"
+			},
+			{
+				"name": "CLOSING_DATE",
+				"type": "String"
+			},
+			{
+				"name": "Current_CLOSING_DATE",
+				"type": "String"
+			},
+			{
+				"name": "REGIONAL_MANAGER",
+				"type": "String"
+			},
+			{
+				"name": "Current_REGIONAL_MANAGER",
+				"type": "String"
+			},
+			{
+				"name": "STORE_MANAGER",
+				"type": "String"
+			},
+			{
+				"name": "Current_STORE_MANAGER",
+				"type": "String"
+			},
+			{
+				"name": "DIVISION",
+				"type": "String"
+			},
+			{
+				"name": "Current_DIVISION",
+				"type": "String"
+			},
+			{
+				"name": "BANNER",
+				"type": "String"
+			},
+			{
+				"name": "Current_BANNER",
+				"type": "String"
+			},
+			{
+				"name": "BANNER_SHORT_NAME",
+				"type": "String"
+			},
+			{
+				"name": "Current_BANNER_SHORT_NAME",
+				"type": "String"
+			},
+			{
+				"name": "DIVISIONAL_ORDER",
+				"type": "String"
+			},
+			{
+				"name": "Current_DIVISIONAL_ORDER",
+				"type": "String"
+			},
+			{
+				"name": "DIVISIONAL_REGIONAL_ROLLUP",
+				"type": "String"
+			},
+			{
+				"name": "Current_DIVISIONAL_REGIONAL_ROLLUP",
+				"type": "String"
+			},
+			{
+				"name": "REGION_NAME",
+				"type": "String"
+			},
+			{
+				"name": "Current_REGION_NAME",
+				"type": "String"
+			},
+			{
+				"name": "REGION",
+				"type": "String"
+			},
+			{
+				"name": "Current_REGION",
+				"type": "String"
+			},
+			{
+				"name": "REPORTING_REGION",
+				"type": "String"
+			},
+			{
+				"name": "Current_REPORTING_REGION",
+				"type": "String"
+			},
+			{
+				"name": "AD_GROUP_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "Current_AD_GROUP_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "AD_GROUP_NAME",
+				"type": "String"
+			},
+			{
+				"name": "Current_AD_GROUP_NAME",
+				"type": "String"
+			},
+			{
+				"name": "AD_GROUP",
+				"type": "String"
+			},
+			{
+				"name": "Current_AD_GROUP",
+				"type": "String"
+			},
+			{
+				"name": "PRICING_GROUP_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "Current_PRICING_GROUP_NUMBER",
+				"type": "String"
+			},
+			{
+				"name": "PRICING_GROUP_NAME",
+				"type": "String"
+			},
+			{
+				"name": "Current_PRICING_GROUP_NAME",
+				"type": "String"
+			},
+			{
+				"name": "PRICING_GROUP",
+				"type": "String"
+			},
+			{
+				"name": "Current_PRICING_GROUP",
+				"type": "String"
+			},
+			{
+				"name": "SAME_STORE",
+				"type": "String"
+			},
+			{
+				"name": "Current_SAME_STORE",
+				"type": "String"
+			},
+			{
+				"name": "ECOMM_STORE",
+				"type": "String"
+			},
+			{
+				"name": "Current_ECOMM_STORE",
+				"type": "String"
+			},
+			{
+				"name": "ALG_STORE",
+				"type": "String"
+			},
+			{
+				"name": "Current_ALG_STORE",
+				"type": "String"
+			},
+			{
+				"name": "OPEN_STORE",
+				"type": "String"
+			},
+			{
+				"name": "Current_OPEN_STORE",
+				"type": "String"
+			},
+			{
+				"name": "OPEN_CONVERTED_STORE",
+				"type": "String"
+			},
+			{
+				"name": "Current_OPEN_CONVERTED_STORE",
+				"type": "String"
+			},
+			{
+				"name": "RESTAURANT_STORE",
+				"type": "String"
+			},
+			{
+				"name": "Current_RESTAURANT_STORE",
+				"type": "String"
+			},
+			{
+				"name": "COFFEE_SHOP_STORE",
+				"type": "String"
+			},
+			{
+				"name": "Current_COFFEE_SHOP_STORE",
+				"type": "String"
+			},
+			{
+				"name": "PHARMACY_STORE",
+				"type": "String"
+			},
+			{
+				"name": "Current_PHARMACY_STORE",
+				"type": "String"
+			},
+			{
+				"name": "STORE_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "Current_STORE_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "LOCATION_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "Current_LOCATION_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "LOCATION_TYPE_DESCRIPTION",
+				"type": "String"
+			},
+			{
+				"name": "Current_LOCATION_TYPE_DESCRIPTION",
+				"type": "String"
+			},
+			{
+				"name": "LOCATION_GROUP_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "Current_LOCATION_GROUP_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "LOCATION_GROUP",
+				"type": "String"
+			},
+			{
+				"name": "Current_LOCATION_GROUP",
+				"type": "String"
+			},
+			{
+				"name": "ECOMM_OPEN_DATE",
+				"type": "String"
+			},
+			{
+				"name": "Current_ECOMM_OPEN_DATE",
+				"type": "String"
+			},
+			{
+				"name": "ECOMM_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "Current_ECOMM_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "MERCH_PROGRAM",
+				"type": "String"
+			},
+			{
+				"name": "Current_MERCH_PROGRAM",
+				"type": "String"
+			},
+			{
+				"name": "LAST_CHANGED",
+				"type": "String"
+			},
+			{
+				"name": "LAST_DML",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,32 @@
+{
+	"name": "BLOBtoParquet_TransactionHeader",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Transactionheader_DataScience",
+						"type": "DatasetReference"
+					},
+					"name": "Transactionheader"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "TargetParquet",
+						"type": "DatasetReference"
+					},
+					"name": "BlobtoBlobParquet"
+				}
+			],
+			"transformations": [
+				{
+					"name": "ExtractYearMonthDay"
+				}
+			],
+			"script": "source(output(\n\t\tDAYOFPURCHASE as timestamp,\n\t\tTRANSACTIONNUMBER as integer,\n\t\tSX as integer,\n\t\tCX as long,\n\t\tREGISTERLANE as integer,\n\t\tCASHIER as string,\n\t\tSPENDING as long,\n\t\tDATELOADED as date,\n\t\tFISCALDATE as date,\n\t\tPOSVER as string,\n\t\tVOIDTRAN as string,\n\t\tDAYOFPURCHASE_DT as date,\n\t\tECOM_TRANS_ID as string,\n\t\tRUNTIME as timestamp,\n\t\tRUN_BY as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> Transactionheader\nTransactionheader derive(Year = year(DAYOFPURCHASE_DT),\n\t\tMonth = month(DAYOFPURCHASE_DT),\n\t\tDay = dayOfMonth(DAYOFPURCHASE_DT)) ~> ExtractYearMonthDay\nExtractYearMonthDay sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tformat: 'parquet',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1,\n\tmapColumn(\n\t\tDAYOFPURCHASE,\n\t\tTRANSACTIONNUMBER,\n\t\tSX,\n\t\tCX,\n\t\tREGISTERLANE,\n\t\tCASHIER,\n\t\tSPENDING,\n\t\tDATELOADED,\n\t\tFISCALDATE,\n\t\tPOSVER,\n\t\tVOIDTRAN,\n\t\tDAYOFPURCHASE_DT,\n\t\tECOM_TRANS_ID,\n\t\tRUNTIME,\n\t\tRUN_BY,\n\t\tYear,\n\t\tMonth,\n\t\tDay\n\t),\n\tpartitionBy('key',\n\t\t0,\n\t\tYear,\n\t\tMonth,\n\t\tDay\n\t)) ~> BlobtoBlobParquet"
+		}
+	}
+}

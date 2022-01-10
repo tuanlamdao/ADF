@@ -1,0 +1,75 @@
+{
+	"name": "RetailKnownShrinkTemp1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageZone3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "FACT_SHRINK.parquet",
+				"folderPath": "Internal/LDW/Parquet/Sales-FACT/RETAIL_KNOWN_SHRINK/Temp",
+				"container": "retail-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "TX_DATE",
+				"type": "DATE"
+			},
+			{
+				"name": "LOCATION_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Location_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "ITEM_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Item_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "SCAN_CODE_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "SHRINK_REASON",
+				"type": "UTF8"
+			},
+			{
+				"name": "DISPOSAL_METHOD",
+				"type": "UTF8"
+			},
+			{
+				"name": "RECALL_NUMBER",
+				"type": "INT32"
+			},
+			{
+				"name": "SHRINK_UNITS",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "SHRINK_COST",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "LAST_CHANGED",
+				"type": "UTF8"
+			},
+			{
+				"name": "LAST_DML",
+				"type": "INT32"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

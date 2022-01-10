@@ -1,0 +1,45 @@
+{
+	"name": "FACT_RETAIL_SALES_OneTimeHistoricalLoad",
+	"properties": {
+		"activities": [
+			{
+				"name": "RETAIL_SALES_Fact_2012",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "RETAIL_SALES_Fact_copy1",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"RetailSalesSRC": {
+								"SrcContainer": "retail-data",
+								"SrcDIR": "internal/LDW/CSV/Sales(POS)/RETAIL_SALE/2021/03",
+								"SrcFileName": "*.csv"
+							},
+							"sinkTGT": {
+								"TgtContainer": "retail-data",
+								"TgtDIR": "Internal/LDW/Parquet/Sales-FACT/RETAIL_SALE/2012/Test"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-03-20T03:24:50Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,149 @@
+{
+	"name": "Run_Ecomm_Star_Data",
+	"properties": {
+		"activities": [
+			{
+				"name": "MvFiles_Ecomm_Star",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "MvFiles_Ecomm_Star_Data",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "EcommStarData_Zone1_Zone3_Part1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "MvFiles_Ecomm_Star",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "EcommStarData_Zone1_Zone3_Part1",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "EcommStarData_Zone1_Zone3_Part2",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "MvFiles_Ecomm_Star",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "EcommStarData_Zone1_Zone3_Part2",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "EcommStarData_Zone1_Zone3_Part3",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "MvFiles_Ecomm_Star",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "EcommStarData_Zone1_Zone3_Part3",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Delete_Ecomm_Source",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "EcommStarData_Zone1_Zone3_Part3",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "EcommStarData_Zone1_Zone3_Part2",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "EcommStarData_Zone1_Zone3_Part1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/rahul_vig@saveonfoods.com/Delete_Ecomm_Source"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Final_Ecomm_Data",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Delete_Ecomm_Source",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/rahul_vig@saveonfoods.com/Ecomm_Start_Data_Final"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-08-01T16:59:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,388 @@
+{
+	"name": "Lookup_Corporate_item",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ITEM_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "ITEM_CODE",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "CLASS_ID",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "CLASS_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CAT_ID",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "CAT_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PRICER_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FAMILY_CODE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ITEM_TYPE_CODE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ITEM_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DEPT_ID",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "DEPT_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "VENDOR_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LOCATION",
+				"type": "nvarchar"
+			},
+			{
+				"name": "RETAIL_METRIC",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "RETAIL_PACK",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "RETAIL_SIZE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "RETAIL_WEIGHT",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 1
+			},
+			{
+				"name": "BOTTLE_DEPOSIT",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 0
+			},
+			{
+				"name": "SHRINK_FACTOR",
+				"type": "decimal",
+				"precision": 3,
+				"scale": 2
+			},
+			{
+				"name": "LISTING_DATE",
+				"type": "date"
+			},
+			{
+				"name": "DISCONTINUED_DATE",
+				"type": "date"
+			},
+			{
+				"name": "DW_UPDATE_DATE",
+				"type": "date"
+			},
+			{
+				"name": "SOURCE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MERCH_GROUP",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "SALES_TAX_CODE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MERCHANDISER_NUMBER",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "MERCHANDISER_NM",
+				"type": "nvarchar"
+			},
+			{
+				"name": "RETAIL_ITEM_CD",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "ITEM_STATUS_CD",
+				"type": "nvarchar"
+			},
+			{
+				"name": "OPTION_CD",
+				"type": "nvarchar"
+			},
+			{
+				"name": "STOCK_ITEM_NUM",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SCAN_CODE",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 0
+			},
+			{
+				"name": "BITM_NUM",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "AP_VENDOR_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "BRAND_NM",
+				"type": "nvarchar"
+			},
+			{
+				"name": "RETALIX_DEPT_ID",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "SIZE_PACK_MLTP",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "QUAN_ENF_CODE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FAMILY_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "LEAD_RETAIL_ITEM_CD",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CORP_BRAND_RETAIL_ITEM_CD",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CORPORATE_BRAND_SHIELD",
+				"type": "nvarchar"
+			},
+			{
+				"name": "STORE_DISC_DATE",
+				"type": "date"
+			},
+			{
+				"name": "OPTION_CD_SHRT_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "OPTION_CD_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DISC_REASON",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BOTTLE_RETURN_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "VENDOR_CPN_IND",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "NEG_ENTRY_IND",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "SEND_SCHEMATIC_IND",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "PID_NUMBER",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "INTENDED_OUT_DATE",
+				"type": "date"
+			},
+			{
+				"name": "REACTIVATE_DATE",
+				"type": "date"
+			},
+			{
+				"name": "SUPPLIER_LAUNCH_DATE",
+				"type": "date"
+			},
+			{
+				"name": "CATEGORY_MGR_LAUNCH",
+				"type": "date"
+			},
+			{
+				"name": "ORGANIC_IND",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FAMILY_CD",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FCST_UNIT_SALE",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "LIKE_ITEM_ID",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "REPL_ITEM_IND",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "CHINESE_LABEL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MDM_CLASS_ID",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "MDM_CLASS_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MDM_CAT_ID",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "MDM_CAT_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MDM_SUB_CAT_ID",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "MDM_SUB_CAT_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ECOM_CAT_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ECOM_CAT_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ECOM_ITEM_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ECOM_DEPT_ID",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "ECOM_DEPT_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BRAND_CODE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ALG_FLAG",
+				"type": "nvarchar"
+			},
+			{
+				"name": "GSAVE_FLAG",
+				"type": "nvarchar"
+			},
+			{
+				"name": "NMH_SUB_CAT",
+				"type": "decimal",
+				"precision": 12,
+				"scale": 0
+			},
+			{
+				"name": "REPLACEMENT_ITEM_FLAG",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FORECAST_LIKE_ITEM",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "Run_by",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Run_date",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "lookup_corporate_item"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

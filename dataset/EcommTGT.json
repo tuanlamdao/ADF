@@ -1,0 +1,30 @@
+{
+	"name": "EcommTGT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSVZone1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TgtDIR": {
+				"type": "String",
+				"defaultValue": "internal/STAR/PARQUET/Address/"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@dataset().TgtDIR",
+					"type": "Expression"
+				},
+				"container": "people-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

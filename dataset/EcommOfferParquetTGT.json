@@ -1,0 +1,78 @@
+{
+	"name": "EcommOfferParquetTGT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageZone3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "Internal/LDW/Parquet/Offer&Promotion-DIM/ECOMM_OFFER",
+				"container": "retail-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "Ecomm_Offer_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "ID",
+				"type": "INT64"
+			},
+			{
+				"name": "Offer",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Offer",
+				"type": "UTF8"
+			},
+			{
+				"name": "Offer_Segment",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Offer_Segment",
+				"type": "UTF8"
+			},
+			{
+				"name": "Offer_Program",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_Offer_Program",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Changed",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Dml",
+				"type": "INT32"
+			},
+			{
+				"name": "Eff_Start_Dt",
+				"type": "DATE"
+			},
+			{
+				"name": "Eff_End_Dt",
+				"type": "DATE"
+			},
+			{
+				"name": "IsActive",
+				"type": "INT32"
+			},
+			{
+				"name": "Crc_Val",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,58 @@
+{
+	"name": "RETAIL_HOLE_COUNT_Fact",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "RetailHoleCountZone1",
+						"type": "DatasetReference"
+					},
+					"name": "RetailHoleCountSRC"
+				},
+				{
+					"dataset": {
+						"referenceName": "EcommTGT",
+						"type": "DatasetReference"
+					},
+					"name": "LocationTGT"
+				},
+				{
+					"dataset": {
+						"referenceName": "ItemZone3TGT",
+						"type": "DatasetReference"
+					},
+					"name": "ItemTGT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "RetailHoleCountTempTGT",
+						"type": "DatasetReference"
+					},
+					"name": "sinkTGT"
+				}
+			],
+			"transformations": [
+				{
+					"name": "JoinFactLocation"
+				},
+				{
+					"name": "JoinFactLocationItem"
+				},
+				{
+					"name": "DerivedColumnDate"
+				},
+				{
+					"name": "FilterLocationActive"
+				},
+				{
+					"name": "FilterItemActive"
+				}
+			],
+			"script": "source(output(\n\t\tTX_DATE as string,\n\t\tLOCATION_ID as long,\n\t\tITEM_ID as long,\n\t\tSCAN_CODE_ID as long,\n\t\tHOLE_REASON as string,\n\t\tHOLE_COUNT as long,\n\t\tLAST_CHANGED as string,\n\t\tLAST_DML as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> RetailHoleCountSRC\nsource(output(\n\t\tLocation_Surrogate_Id as long,\n\t\tID as long,\n\t\tStore_Name as string,\n\t\tCurrent_Store_Name as string,\n\t\tStore_Number as integer,\n\t\tCurrent_Store_Number as integer,\n\t\tStore as string,\n\t\tCurrent_Store as string,\n\t\tStore_Address as string,\n\t\tCurrent_Store_Address as string,\n\t\tCity as string,\n\t\tCurrent_City as string,\n\t\tProvince as string,\n\t\tCurrent_Province as string,\n\t\tPostal_Code as string,\n\t\tCurrent_Postal_Code as string,\n\t\tLatitude as double,\n\t\tCurrent_Latitude as double,\n\t\tLongitude as double,\n\t\tCurrent_Longitude as double,\n\t\tSquare_Footage as integer,\n\t\tCurrent_Square_Footage as integer,\n\t\tOpening_Date as date,\n\t\tCurrent_Opening_Date as date,\n\t\tClosing_Date as date,\n\t\tCurrent_Closing_Date as date,\n\t\tRegional_Manager as string,\n\t\tCurrent_Regional_Manager as string,\n\t\tStore_Manager as string,\n\t\tCurrent_Store_Manager as string,\n\t\tDivision as string,\n\t\tCurrent_Division as string,\n\t\tBanner as string,\n\t\tCurrent_Banner as string,\n\t\tBanner_Short_Name as string,\n\t\tCurrent_Banner_Short_Name as string,\n\t\tDivisional_Order as integer,\n\t\tCurrent_Divisional_Order as integer,\n\t\tDivisional_Regional_Rollup as string,\n\t\tCurrent_Divisional_Regional_Rollup as string,\n\t\tRegion_Name as string,\n\t\tCurrent_Region_Name as string,\n\t\tRegion as integer,\n\t\tCurrent_Region as integer,\n\t\tReporting_Region as string,\n\t\tCurrent_Reporting_Region as string,\n\t\tAd_Group_Number as integer,\n\t\tCurrent_Ad_Group_Number as integer,\n\t\tAd_Group_Name as string,\n\t\tCurrent_Ad_Group_Name as string,\n\t\tAd_Group as string,\n\t\tCurrent_Ad_Group as string,\n\t\tPricing_Group_Number as integer,\n\t\tCurrent_Pricing_Group_Number as integer,\n\t\tPricing_Group_Name as string,\n\t\tCurrent_Pricing_Group_Name as string,\n\t\tPricing_Group as string,\n\t\tCurrent_Pricing_Group as string,\n\t\tSame_Store as string,\n\t\tCurrent_Same_Store as string,\n\t\tEcomm_Store as string,\n\t\tCurrent_Ecomm_Store as string,\n\t\tAlg_Store as string,\n\t\tCurrent_Alg_Store as string,\n\t\tOpen_Store as string,\n\t\tCurrent_Open_Store as string,\n\t\tOpen_Converted_Store as string,\n\t\tCurrent_Open_Converted_Store as string,\n\t\tRestaurant_Store as string,\n\t\tCurrent_Restaurant_Store as string,\n\t\tCoffee_Shop_Store as string,\n\t\tCurrent_Coffee_Shop_Store as string,\n\t\tPharmacy_Store as string,\n\t\tCurrent_Pharmacy_Store as string,\n\t\tStore_Type as string,\n\t\tCurrent_Store_Type as string,\n\t\tLocation_Type as string,\n\t\tCurrent_Location_Type as string,\n\t\tLocation_Type_Description as string,\n\t\tCurrent_Location_Type_Description as string,\n\t\tLocation_Group_Type as string,\n\t\tCurrent_Location_Group_Type as string,\n\t\tLocation_Group as string,\n\t\tCurrent_Location_Group as string,\n\t\tEcomm_Open_Date as date,\n\t\tCurrent_Ecomm_Open_Date as date,\n\t\tEcomm_Type as string,\n\t\tCurrent_Ecomm_Type as string,\n\t\tMerch_Program as string,\n\t\tCurrent_Merch_Program as string,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> LocationTGT\nsource(output(\n\t\tItem_Surrogate_Id as long,\n\t\tID as long,\n\t\tLegacy_Item_Code as integer,\n\t\tCurrent_Legacy_Item_Code as integer,\n\t\tVariant_Id as integer,\n\t\tCurrent_Variant_Id as integer,\n\t\tVariant_Name as string,\n\t\tCurrent_Variant_Name as string,\n\t\tVariant as string,\n\t\tCurrent_Variant as string,\n\t\tChinese_Variant as string,\n\t\tCurrent_Chinese_Variant as string,\n\t\tChinese_Variant_Name as string,\n\t\tCurrent_Chinese_Variant_Name as string,\n\t\tLead_Variant_Indicator as integer,\n\t\tCurrent_Lead_Variant_Indicator as integer,\n\t\tLead_Retail_Variant as integer,\n\t\tCurrent_Lead_Retail_Variant as integer,\n\t\tRetail_Size as string,\n\t\tCurrent_Retail_Size as string,\n\t\tRetail_Weight as double,\n\t\tCurrent_Retail_Weight as double,\n\t\tRetail_Pack as integer,\n\t\tCurrent_Retail_Pack as integer,\n\t\tProduct_Status as integer,\n\t\tCurrent_Product_Status as integer,\n\t\tOption_Code as integer,\n\t\tCurrent_Option_Code as integer,\n\t\tTax_Code as integer,\n\t\tCurrent_Tax_Code as integer,\n\t\tFinancial_Sale_Flag as string,\n\t\tCurrent_Financial_Sale_Flag as string,\n\t\tMerch_Sales_Flag as string,\n\t\tCurrent_Merch_Sales_Flag as string,\n\t\tStit as string,\n\t\tCurrent_Stit as string,\n\t\tDPack as string,\n\t\tCurrent_DPack as string,\n\t\tBasket_Type as string,\n\t\tCurrent_Basket_Type as string,\n\t\tStrategic_Group as string,\n\t\tCurrent_Strategic_Group as string,\n\t\tSell_Units as double,\n\t\tCurrent_Sell_Units as double,\n\t\tAmp_Forecast_Item as string,\n\t\tCurrent_Amp_Forecast_Item as string,\n\t\tRepack_Flag as string,\n\t\tCurrent_Repack_Flag as string,\n\t\tLast_Week_Ad_Type as string,\n\t\tCurrent_Last_Week_Ad_Type as string,\n\t\tStore_Report as string,\n\t\tCurrent_Store_Report as string,\n\t\tDepartment_Id as integer,\n\t\tCurrent_Department_Id as integer,\n\t\tDepartment_Name as string,\n\t\tCurrent_Department_Name as string,\n\t\tMerch_Department_Id as integer,\n\t\tCurrent_Merch_Department_Id as integer,\n\t\tMerch_Department as string,\n\t\tCurrent_Merch_Department as string,\n\t\tGL_Department_Id as integer,\n\t\tCurrent_GL_Department_Id as integer,\n\t\tGL_Department_Name as string,\n\t\tCurrent_GL_Department_Name as string,\n\t\tCons_GL_Department_Id as integer,\n\t\tCurrent_Cons_GL_Department_Id as integer,\n\t\tCons_GL_Department as string,\n\t\tCurrent_Cons_GL_Department as string,\n\t\tCons_GL_Department_Name as string,\n\t\tCurrent_Cons_GL_Department_Name as string,\n\t\tCons_Department as string,\n\t\tCurrent_Cons_Department as string,\n\t\tHigh_Level_Department as string,\n\t\tCurrent_High_Level_Department as string,\n\t\tClass_Cat_Id as integer,\n\t\tCurrent_Class_Cat_Id as integer,\n\t\tClass_Cat as string,\n\t\tCurrent_Class_Cat as string,\n\t\tCategory_Id as integer,\n\t\tCurrent_Category_Id as integer,\n\t\tCategory as string,\n\t\tCurrent_Category as string,\n\t\tNew_Class as string,\n\t\tCurrent_Cnew_Class as string,\n\t\tNew_Class_Category as string,\n\t\tCurrent_New_Class_Category as string,\n\t\tNew_Class_Subcategory as string,\n\t\tCurrent_New_Class_Subcategory as string,\n\t\tFamily_Code as string,\n\t\tCurrent_Family_Code as string,\n\t\tFamily_Name as string,\n\t\tCurrent_Family_Name as string,\n\t\tFamily_Id as integer,\n\t\tCurrent_Family_Id as integer,\n\t\tFamily as string,\n\t\tCurrent_Family as string,\n\t\tVendor_Id as string,\n\t\tCurrent_Vendor_Id as string,\n\t\tBrand_Name as string,\n\t\tCurrent_Brand_Name as string,\n\t\tAP_Vendor_Id as string,\n\t\tCurrent_AP_Vendor_Id as string,\n\t\tAP_Vendor_Name as string,\n\t\tCurrent_AP_Vendor_Name as string,\n\t\tAP_Vendor as string,\n\t\tCurrent_AP_Vendor as string,\n\t\tAP_Vendor_Address_Line_1 as string,\n\t\tCurrent_AP_Vendor_Address_Line_1 as string,\n\t\tAP_Vendor_Address_Line_2 as string,\n\t\tCurrent_AP_Vendor_Address_Line_2 as string,\n\t\tAP_Vendor_City as string,\n\t\tCurrent_AP_Vendor_City as string,\n\t\tAP_Vendor_Province as string,\n\t\tCurrent_AP_Vendor_Province as string,\n\t\tCorp_Brand_Description as string,\n\t\tCurrent_Corp_Brand_Description as string,\n\t\tCorp_Brand_Short_Description as string,\n\t\tCurrent_Corp_Brand_Short_Description as string,\n\t\tCorp_Brand_Indicator as string,\n\t\tCurrent_Corp_Brand_Indicator as string,\n\t\tCorp_Brand_Variant_Code as string,\n\t\tCurrent_Corp_Brand_Variant_Code as string,\n\t\tCorp_Brand_Shield as string,\n\t\tCurrent_Corp_Brand_Shield as string,\n\t\tCorp_Brand_Variant as string,\n\t\tCurrent_Corp_Brand_Variant as string,\n\t\tCorp_Brand_Variant_Name as string,\n\t\tCurrent_Corp_Brand_Variant_Name as string,\n\t\tDaymon as string,\n\t\tCurrent_Daymon as string,\n\t\tMerchandiser_Name as string,\n\t\tCurrent_Merchandiser_Name as string,\n\t\tMerchandiser_Number as string,\n\t\tCurrent_Merchandiser_Number as string,\n\t\tMerchandiser as string,\n\t\tCurrent_Merchandiser as string,\n\t\tSCPM as string,\n\t\tCurrent_SCPM as string,\n\t\tGeneral_Manager as string,\n\t\tCurrent_General_Manager as string,\n\t\tVice_President as string,\n\t\tCurrent_Vice_President as string,\n\t\tCB_Director as string,\n\t\tCurrent_CB_Director as string,\n\t\tBusiness_Development_Manager as string,\n\t\tCurrent_Business_Development_Manager as string,\n\t\tListing_Date as date,\n\t\tCurrent_Listing_Date as date,\n\t\tDiscontinue_Date as string,\n\t\tCurrent_Discontinue_Date as string,\n\t\tDiscontinue_Reason as string,\n\t\tCurrent_Discontinue_Reason as string,\n\t\tFamily_Start_Date as date,\n\t\tCurrent_Family_Start_Date as date,\n\t\tFamily_End_Date as date,\n\t\tCurrent_Family_End_Date as date,\n\t\tSource_System_Code as string,\n\t\tCurrent_Source_System_Code as string,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> ItemTGT\nRetailHoleCountSRC, FilterLocationActive join(LOCATION_ID == ID,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinFactLocation\nJoinFactLocation, FilterItemActive join(ITEM_ID == ItemTGT@ID,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinFactLocationItem\nJoinFactLocationItem derive(o_TX_DATE = toDate(TX_DATE,'MM/dd/yyyy')) ~> DerivedColumnDate\nLocationTGT filter(IsActive == 1) ~> FilterLocationActive\nItemTGT filter(IsActive == 1) ~> FilterItemActive\nDerivedColumnDate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tTransaction_Date as date,\n\t\tLocation_Surrogate_Id as long,\n\t\tItem_Surrogate_Id as long,\n\t\tScan_Code_Id as long,\n\t\tHole_Reason as string,\n\t\tHole_Count as long,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer\n\t),\n\tformat: 'parquet',\n\tmapColumn(\n\t\tTransaction_Date = o_TX_DATE,\n\t\tLocation_Surrogate_Id,\n\t\tItem_Surrogate_Id,\n\t\tScan_Code_Id = SCAN_CODE_ID,\n\t\tHole_Reason = HOLE_REASON,\n\t\tHole_Count = HOLE_COUNT,\n\t\tLast_Changed = RetailHoleCountSRC@LAST_CHANGED,\n\t\tLast_Dml = RetailHoleCountSRC@LAST_DML\n\t)) ~> sinkTGT"
+		}
+	}
+}

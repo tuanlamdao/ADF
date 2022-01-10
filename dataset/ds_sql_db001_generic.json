@@ -1,0 +1,13 @@
+{
+	"name": "ds_sql_db001_generic",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_db001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

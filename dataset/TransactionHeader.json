@@ -1,0 +1,91 @@
+{
+	"name": "TransactionHeader",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "DAYOFPURCHASE",
+				"type": "time",
+				"scale": 7
+			},
+			{
+				"name": "TRANSACTIONNUMBER",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SX",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "CX",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "REGISTERLANE",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "CASHIER",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SPENDING",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "DATELOADED",
+				"type": "date"
+			},
+			{
+				"name": "FISCALDATE",
+				"type": "date"
+			},
+			{
+				"name": "POSVER",
+				"type": "nvarchar"
+			},
+			{
+				"name": "VOIDTRAN",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DAYOFPURCHASE_DT",
+				"type": "date"
+			},
+			{
+				"name": "ECOM_TRANS_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SK",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "RUNTIME",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "RUN_BY",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "transactionheader"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

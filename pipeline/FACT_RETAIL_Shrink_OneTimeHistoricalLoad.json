@@ -1,0 +1,45 @@
+{
+	"name": "FACT_RETAIL_Shrink_OneTimeHistoricalLoad",
+	"properties": {
+		"activities": [
+			{
+				"name": "RETAIL_KNOWN_SHRINK_Fact_OneTime",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "RETAIL_KNOWN_SHRINK_Fact_OneTime",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"RetailKnownShrinkSRC": {
+								"SrcContainer": "retail-data",
+								"SrcDir": "internal/LDW/CSV/Shrink/RETAIL_KNOWN_SHRINK/2020/12",
+								"SrcFileName": "*.csv"
+							},
+							"sinkTGT": {
+								"TgtContainer": "retail-data",
+								"TgtDIR": "Internal/LDW/Parquet/Sales-FACT/RETAIL_KNOWN_SHRINK"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Coarse"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-01-06T20:26:54Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

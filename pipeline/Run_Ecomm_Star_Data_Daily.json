@@ -1,0 +1,83 @@
+{
+	"name": "Run_Ecomm_Star_Data_Daily",
+	"properties": {
+		"activities": [
+			{
+				"name": "MvFiles_Ecomm_Star",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "MvFiles_Ecomm_Star_Data",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "EcommStarData_Zone1_Zone3_Part1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "MvFiles_Ecomm_Star",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "EcommStarData_Zone1_Zone3_Part1",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "EcommStarData_Zone1_Zone3_Part2",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "MvFiles_Ecomm_Star",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "EcommStarData_Zone1_Zone3_Part2",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "EcommStarData_Zone1_Zone3_Part3",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "MvFiles_Ecomm_Star",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "EcommStarData_Zone1_Zone3_Part3",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-11-16T23:24:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

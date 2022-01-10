@@ -1,0 +1,86 @@
+{
+	"name": "SaleTypeReadMultipleTempParquetFiles",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageZone3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "Internal/LDW/Parquet/Sales-DIM/SALE_TYPE/Temp",
+				"container": "retail-data"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "Sales_Type_Surrogate_ID",
+				"type": "INT64"
+			},
+			{
+				"name": "ID",
+				"type": "INT64"
+			},
+			{
+				"name": "NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "CONSOLIDATED_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_CONSOLIDATED_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "CONSOLIDATED_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "Current_CONSOLIDATED_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "RANK",
+				"type": "INT32"
+			},
+			{
+				"name": "Current_RANK",
+				"type": "INT32"
+			},
+			{
+				"name": "LAST_CHANGED",
+				"type": "UTF8"
+			},
+			{
+				"name": "LAST_DML",
+				"type": "INT32"
+			},
+			{
+				"name": "EFF_START_DT",
+				"type": "DATE"
+			},
+			{
+				"name": "EFF_END_DT",
+				"type": "DATE"
+			},
+			{
+				"name": "IsActive",
+				"type": "INT32"
+			},
+			{
+				"name": "CRC_VAL",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,45 @@
+{
+	"name": "RetailSalesZone3TGT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageZone3",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TGTContainer": {
+				"type": "String",
+				"defaultValue": "retail-data"
+			},
+			"TGTDir": {
+				"type": "String",
+				"defaultValue": "Internal/LDW/Parquet/Sales-FACT/RETAIL_SALE/Temp"
+			},
+			"TGTFileName": {
+				"type": "String",
+				"defaultValue": "FACT_RETAIL_SALE.parquet"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().TGTFileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().TGTDir",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().TGTContainer",
+					"type": "Expression"
+				}
+			},
+			"compressionCodec": "none"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,83 @@
+{
+	"name": "Transactionheader_DataScience",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "raw.transactionheader.parquet",
+				"folderPath": "DataScientist",
+				"container": "synapse"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "DAYOFPURCHASE",
+				"type": "INT96"
+			},
+			{
+				"name": "TRANSACTIONNUMBER",
+				"type": "INT32"
+			},
+			{
+				"name": "SX",
+				"type": "INT32"
+			},
+			{
+				"name": "CX",
+				"type": "INT64"
+			},
+			{
+				"name": "REGISTERLANE",
+				"type": "INT32"
+			},
+			{
+				"name": "CASHIER",
+				"type": "UTF8"
+			},
+			{
+				"name": "SPENDING",
+				"type": "INT64"
+			},
+			{
+				"name": "DATELOADED",
+				"type": "DATE"
+			},
+			{
+				"name": "FISCALDATE",
+				"type": "DATE"
+			},
+			{
+				"name": "POSVER",
+				"type": "UTF8"
+			},
+			{
+				"name": "VOIDTRAN",
+				"type": "UTF8"
+			},
+			{
+				"name": "DAYOFPURCHASE_DT",
+				"type": "DATE"
+			},
+			{
+				"name": "ECOM_TRANS_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "RUNTIME",
+				"type": "INT96"
+			},
+			{
+				"name": "RUN_BY",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

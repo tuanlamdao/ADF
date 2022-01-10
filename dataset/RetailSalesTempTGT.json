@@ -1,0 +1,162 @@
+{
+	"name": "RetailSalesTempTGT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageZone3",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TgtContainer": {
+				"type": "String",
+				"defaultValue": "retail-data"
+			},
+			"TgtDIR": {
+				"type": "String",
+				"defaultValue": "Internal/LDW/Parquet/Sales-FACT/RETAIL_SALE"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@dataset().TgtDIR",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().TgtContainer",
+					"type": "Expression"
+				}
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "Transaction_Number",
+				"type": "INT64"
+			},
+			{
+				"name": "Item_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "Fiscal_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Location_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "Register_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "Cashier_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "Offer_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "POS_Code",
+				"type": "INT32"
+			},
+			{
+				"name": "Transaction_Time",
+				"type": "UTF8"
+			},
+			{
+				"name": "Customer_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "Scan_Code_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "Ecomm_Trans_Id",
+				"type": "INT32"
+			},
+			{
+				"name": "Sales_Type_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "Batch_Number",
+				"type": "INT32"
+			},
+			{
+				"name": "Ad_Vehicle_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "Ecomm_Flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "Incentive_Surrogate_Id",
+				"type": "INT64"
+			},
+			{
+				"name": "Regular_Retail",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Redemption_Sales",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Product_Cost",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Points_Issued",
+				"type": "INT32"
+			},
+			{
+				"name": "Points_Redeemed",
+				"type": "INT32"
+			},
+			{
+				"name": "Merch_Sales",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Unit_Count",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Item_Count",
+				"type": "INT32"
+			},
+			{
+				"name": "Weight",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Mfc_Units",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Last_Changed",
+				"type": "UTF8"
+			},
+			{
+				"name": "Last_Dml",
+				"type": "INT32"
+			},
+			{
+				"name": "Year",
+				"type": "INT32"
+			},
+			{
+				"name": "Month",
+				"type": "INT32"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

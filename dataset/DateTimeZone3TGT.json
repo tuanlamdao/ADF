@@ -1,0 +1,130 @@
+{
+	"name": "DateTimeZone3TGT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageZone3",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TGTDir": {
+				"type": "String",
+				"defaultValue": "internal/LDW/Parquet/Time-DIM/DIM_DATE"
+			},
+			"TGTContainer": {
+				"type": "String",
+				"defaultValue": "master-data"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@dataset().TGTDir",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().TGTContainer",
+					"type": "Expression"
+				}
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Week_End_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Period_End_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Quarter_End_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Period",
+				"type": "INT_16"
+			},
+			{
+				"name": "Week",
+				"type": "INT_16"
+			},
+			{
+				"name": "Quarter",
+				"type": "INT_16"
+			},
+			{
+				"name": "Year",
+				"type": "INT_16"
+			},
+			{
+				"name": "Yr-Wk",
+				"type": "UTF8"
+			},
+			{
+				"name": "Yr-Pd",
+				"type": "UTF8"
+			},
+			{
+				"name": "Yr-Qtr",
+				"type": "UTF8"
+			},
+			{
+				"name": "Month-Day",
+				"type": "UTF8"
+			},
+			{
+				"name": "Flyer_Year_Number",
+				"type": "INT_16"
+			},
+			{
+				"name": "Flyer_Week_Number",
+				"type": "INT_16"
+			},
+			{
+				"name": "Flyer_Week_Ending_Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Flyer_Yr-Wk",
+				"type": "UTF8"
+			},
+			{
+				"name": "Calendar_Year",
+				"type": "INT_16"
+			},
+			{
+				"name": "Calendar_Month",
+				"type": "UTF8"
+			},
+			{
+				"name": "Fiscal_Day_Number",
+				"type": "INT_16"
+			},
+			{
+				"name": "Day_Of_Week",
+				"type": "UTF8"
+			},
+			{
+				"name": "Day_Of_Week_Number",
+				"type": "INT_16"
+			},
+			{
+				"name": "Week_Sort",
+				"type": "INT_16"
+			},
+			{
+				"name": "Leap_Year",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

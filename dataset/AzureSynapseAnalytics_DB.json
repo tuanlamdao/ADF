@@ -1,0 +1,78 @@
+{
+	"name": "AzureSynapseAnalytics_DB",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseAnalytics_Database",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "Incentive_Surrogate_Id",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Incentive",
+				"type": "varchar"
+			},
+			{
+				"name": "Current_Incentive",
+				"type": "varchar"
+			},
+			{
+				"name": "Incentive_Price_Type",
+				"type": "varchar"
+			},
+			{
+				"name": "Current_Incentive_Price_Type",
+				"type": "varchar"
+			},
+			{
+				"name": "Redemption_Type",
+				"type": "varchar"
+			},
+			{
+				"name": "Current_Redemption_Type",
+				"type": "varchar"
+			},
+			{
+				"name": "Last_Changed",
+				"type": "varchar"
+			},
+			{
+				"name": "Last_Dml",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Eff_Start_Dt",
+				"type": "date"
+			},
+			{
+				"name": "Eff_End_Dt",
+				"type": "date"
+			},
+			{
+				"name": "IsActive",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Crc_Val",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_OFFER_INCENTIVE"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,28 @@
+{
+	"name": "REGISTER_FinalSCD6",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "RegisterReadMultipleTempParquetFiles",
+						"type": "DatasetReference"
+					},
+					"name": "REGISTERMultipleParquetFiles"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "RegisterParquetTGT",
+						"type": "DatasetReference"
+					},
+					"name": "sinkRegisterFinal"
+				}
+			],
+			"transformations": [],
+			"script": "source(output(\n\t\tRegister_Surrogate_ID as long,\n\t\tID as integer,\n\t\tREGISTER_TYPE as string,\n\t\tCurrent_REGISTER_TYPE as string,\n\t\tECOMM_LANE as string,\n\t\tCurrent_ECOMM_LANE as string,\n\t\tLAST_CHANGED as string,\n\t\tLAST_DML as integer,\n\t\tEFF_START_DT as date,\n\t\tEFF_END_DT as date,\n\t\tIsActive as integer,\n\t\tCRC_VAL as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet',\n\twildcardPaths:['Internal/LDW/Parquet/Sales-DIM/REGISTER/Temp/*.parquet']) ~> REGISTERMultipleParquetFiles\nREGISTERMultipleParquetFiles sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tRegister_Surrogate_Id as long,\n\t\tID as integer,\n\t\tRegister_Type as string,\n\t\tCurrent_Register_Type as string,\n\t\tEcomm_Lane as string,\n\t\tCurrent_Ecomm_Lane as string,\n\t\tLast_Changed as string,\n\t\tLast_Dml as integer,\n\t\tEff_Start_Dt as date,\n\t\tEff_End_Dt as date,\n\t\tIsActive as integer,\n\t\tCrc_Val as string\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['DIM_REGISTERS.parquet'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tmapColumn(\n\t\tRegister_Surrogate_Id = Register_Surrogate_ID,\n\t\tID,\n\t\tRegister_Type = REGISTER_TYPE,\n\t\tCurrent_Register_Type = Current_REGISTER_TYPE,\n\t\tEcomm_Lane = ECOMM_LANE,\n\t\tCurrent_Ecomm_Lane = Current_ECOMM_LANE,\n\t\tLast_Changed = LAST_CHANGED,\n\t\tLast_Dml = LAST_DML,\n\t\tEff_Start_Dt = EFF_START_DT,\n\t\tEff_End_Dt = EFF_END_DT,\n\t\tIsActive,\n\t\tCrc_Val = CRC_VAL\n\t),\n\tpartitionBy('hash', 1)) ~> sinkRegisterFinal"
+		}
+	}
+}

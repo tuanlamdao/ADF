@@ -1,0 +1,305 @@
+{
+	"name": "FACT_RETAIL_SALES",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get_Metadata_RetailSalesFact",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "CSVZone1",
+						"type": "DatasetReference",
+						"parameters": {
+							"SrcContainer": "retail-data",
+							"SrcDIR": "internal/LDW/CSV/Sales(POS)/RETAIL_SALE/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED"
+						}
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get_Metadata_RetailSalesFact",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get_Metadata_RetailSalesFact').output.childItems",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "RETAIL_SALES_Fact",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "RETAIL_SALES_Fact",
+									"type": "DataFlowReference",
+									"datasetParameters": {
+										"RetailSalesSRC": {
+											"SrcContainer": "retail-data",
+											"SrcDIR": "internal/LDW/CSV/Sales(POS)/RETAIL_SALE/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+											"SrcFileName": {
+												"value": "@item().name",
+												"type": "Expression"
+											}
+										},
+										"sinkTGT": {
+											"TgtContainer": "retail-data",
+											"TgtDIR": "Internal/LDW/Parquet/Sales-FACT/RETAIL_SALE/@{formatDateTime(utcnow(),'yyyy')}"
+										}
+									}
+								},
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								},
+								"traceLevel": "Coarse"
+							}
+						},
+						{
+							"name": "Copy_SrcFile",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "RETAIL_SALES_Fact",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": false,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "RetailSalesZone1",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "retail-data",
+										"SrcDIR": "internal/LDW/CSV/Sales(POS)/RETAIL_SALE/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "RetailSalesZone1",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "retail-data",
+										"SrcDIR": "internal/LDW/CSV/Sales(POS)/RETAIL_SALE/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "DeleteSrcFile",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "Copy_SrcFile",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "RetailSalesZone1",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "retail-data",
+										"SrcDIR": "internal/LDW/CSV/Sales(POS)/RETAIL_SALE/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": false,
+									"enablePartitionDiscovery": false
+								}
+							}
+						},
+						{
+							"name": "Copy_SrcFiletoFailure",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "RETAIL_SALES_Fact",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": false,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "RetailSalesZone1",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "retail-data",
+										"SrcDIR": "internal/LDW/CSV/Sales(POS)/RETAIL_SALE/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/UNPROCESSED",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "RetailSalesZone1",
+									"type": "DatasetReference",
+									"parameters": {
+										"SrcContainer": "retail-data",
+										"SrcDIR": "internal/LDW/CSV/Sales(POS)/RETAIL_SALE/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/Failure",
+										"SrcFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-12-18T21:35:02Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

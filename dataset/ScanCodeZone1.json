@@ -1,0 +1,66 @@
+{
+	"name": "ScanCodeZone1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCSV",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "SCAN_CODE_20201007_140822.csv",
+				"folderPath": "internal/LDW/CSV/Product/SCAN_CODE/2020/10",
+				"container": "master-data"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "SCAN_CODE",
+				"type": "String"
+			},
+			{
+				"name": "SCAN_CODE_DESCRIPTION",
+				"type": "String"
+			},
+			{
+				"name": "ITEM_ID",
+				"type": "String"
+			},
+			{
+				"name": "VARIANT_ID",
+				"type": "String"
+			},
+			{
+				"name": "PRIMARY_SCAN_CODE",
+				"type": "String"
+			},
+			{
+				"name": "PRIMARY_VARIANT",
+				"type": "String"
+			},
+			{
+				"name": "DW_UPDATE_DATE",
+				"type": "String"
+			},
+			{
+				"name": "LAST_CHANGED",
+				"type": "String"
+			},
+			{
+				"name": "LAST_DML",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

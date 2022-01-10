@@ -1,0 +1,57 @@
+{
+	"name": "EcommStarData_Zone1_Zone3_Part3",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lab_Workgroup_DIM",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/rahul_vig@saveonfoods.com/Lab_Workgroup_DIM"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Lab_Workgroup_Job_List_DIM",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Lab_Workgroup_DIM",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/rahul_vig@saveonfoods.com/Lab_Workgroup_Job_List_DIM"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-06-28T22:43:50Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
